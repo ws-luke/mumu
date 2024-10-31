@@ -6,33 +6,39 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="#">線材類</a>
+              <router-link to="/products" class="nav-link">線材類</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">掛繩類</a>
+              <router-link to="/products" class="nav-link">掛繩類</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">手機殼</a>
+              <router-link to="/products" class="nav-link">手機殼</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">充電頭</a>
+              <router-link to="/products" class="nav-link">充電頭</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">螢幕保護貼</a>
+              <router-link to="/products" class="nav-link"
+                >螢幕保護貼</router-link
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">行動電源</a>
+              <router-link to="/products" class="nav-link"
+                >行動電源</router-link
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">藍芽耳機</a>
+              <router-link to="/products" class="nav-link"
+                >藍芽耳機</router-link
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">觸控筆</a>
+              <router-link to="/products" class="nav-link">觸控筆</router-link>
             </li>
           </ul>
           <div class="d-flex">
             <!-- 個人 -->
-            <a href="#" class="nav-link me-2">
+            <router-link to="/login" class="nav-link me-2">
               <svg
                 class="header__individual-icon"
                 height="50px"
@@ -56,9 +62,9 @@
                   </g>
                 </g>
               </svg>
-            </a>
+            </router-link>
             <!-- 購物車 -->
-            <a href="#" class="nav-link">
+            <router-link to="cart" class="nav-link">
               <svg
                 class="header__individual-icon"
                 height="50px"
@@ -93,7 +99,7 @@
                   </g>
                 </g>
               </svg>
-            </a>
+            </router-link>
           </div>
         </div>
         <button
@@ -444,16 +450,24 @@
             ></a>
             <ul class="navbar-nav collapse px-3" id="collapseCable">
               <li class="nav-item">
-                <a class="nav-link" href="#">USB A – Type C</a>
+                <router-link to="/products" class="nav-link"
+                  >USB A – Type C</router-link
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">USB C – Type C</a>
+                <router-link to="/products" class="nav-link"
+                  >USB C – Type C</router-link
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">USB A – Lightning</a>
+                <router-link to="/products" class="nav-link"
+                  >USB A – Lightning</router-link
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">USB C - Lightning</a>
+                <router-link to="/products" class="nav-link"
+                  >USB C - Lightning</router-link
+                >
               </li>
             </ul>
           </li>
