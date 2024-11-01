@@ -38,7 +38,7 @@
           </ul>
           <div class="d-flex">
             <!-- 個人 -->
-            <router-link to="/login" class="nav-link me-2">
+            <router-link to="/users/signIn" class="nav-link me-2">
               <svg
                 class="header__individual-icon"
                 height="50px"

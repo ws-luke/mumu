@@ -10,24 +10,29 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/',
+      path: '/cart',
       name: 'cart',
       component: () => import('../views/CartView.vue'),
     },
     {
-      path: '/',
+      path: '/products',
       name: 'products',
       component: () => import('../views/ProductsView.vue'),
     },
     {
-      path: '/',
+      path: '/product',
       name: 'product',
       component: () => import('../views/ProductView.vue'),
     },
     {
-      path: '/',
-      name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      path: '/users/signIn',
+      name: 'SignIn',
+      component: () => import('../views/users/SignInView.vue'),
+    },
+    {
+      path: '/users/signUp',
+      name: 'SignUp',
+      component: () => import('../views/users/SignUpView.vue'),
     },
   ],
 })
