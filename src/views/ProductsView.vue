@@ -3,8 +3,10 @@
     <div class="container mt-4">
       <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">首頁</a></li>
-          <li class="breadcrumb-item active" aria-current="page">產品列表</li>
+          <li class="breadcrumb-item">
+            <router-link to="/" class="text-decoration-none">首頁</router-link>
+          </li>
+          <li class="breadcrumb-item active">產品列表</li>
         </ol>
       </nav>
       <div class="row">
@@ -38,22 +40,22 @@
               ></a>
               <ul class="navbar-nav collapse px-3" id="collapseCable">
                 <li class="nav-item">
-                  <router-link to="/products" class="nav-link"
+                  <router-link to="/product" class="nav-link"
                     >USB A – Type C</router-link
                   >
                 </li>
                 <li class="nav-item">
-                  <router-link to="/products" class="nav-link"
+                  <router-link to="/product" class="nav-link"
                     >USB C – Type C</router-link
                   >
                 </li>
                 <li class="nav-item">
-                  <router-link to="/products" class="nav-link"
+                  <router-link to="/product" class="nav-link"
                     >USB A – Lightning</router-link
                   >
                 </li>
                 <li class="nav-item">
-                  <router-link to="/products" class="nav-link"
+                  <router-link to="/product" class="nav-link"
                     >USB C - Lightning</router-link
                   >
                 </li>
@@ -87,10 +89,14 @@
               ></a>
               <ul class="navbar-nav collapse px-3" id="collapseLanyard">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">充電掛繩</a>
+                  <router-link to="/product" class="nav-link"
+                    >充電掛繩</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">一般掛繩</a>
+                  <router-link to="/product" class="nav-link"
+                    >一般掛繩</router-link
+                  >
                 </li>
               </ul>
             </li>
@@ -122,13 +128,19 @@
               ></a>
               <ul class="navbar-nav collapse px-3" id="collapseMobileCase">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Iphone 14</a>
+                  <router-link to="/product" class="nav-link"
+                    >Iphone 14</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Iphone 15</a>
+                  <router-link to="/product" class="nav-link"
+                    >Iphone 15</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Iphone 16</a>
+                  <router-link to="/product" class="nav-link"
+                    >Iphone 16</router-link
+                  >
                 </li>
               </ul>
             </li>
@@ -160,7 +172,7 @@
               ></a>
               <ul class="navbar-nav collapse px-3" id="collapseCharg">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">65W</a>
+                  <router-link to="/product" class="nav-link">65W</router-link>
                 </li>
               </ul>
             </li>
@@ -192,13 +204,19 @@
               ></a>
               <ul class="navbar-nav collapse px-3" id="collapseScreenProtector">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Iphone 14</a>
+                  <router-link to="/product" class="nav-link"
+                    >Iphone 14</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Iphone 15</a>
+                  <router-link to="/product" class="nav-link"
+                    >Iphone 15</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Iphone 16</a>
+                  <router-link to="/product" class="nav-link"
+                    >Iphone 16</router-link
+                  >
                 </li>
               </ul>
             </li>
@@ -230,7 +248,9 @@
               ></a>
               <ul class="navbar-nav collapse px-3" id="collapsePowerBank">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">10000mAh</a>
+                  <router-link to="/product" class="nav-link"
+                    >10000mAh</router-link
+                  >
                 </li>
               </ul>
             </li>
@@ -265,22 +285,23 @@
                 id="collapseBluetoothHeadset"
               >
                 <li class="nav-item">
-                  <a class="nav-link" href="#">入耳式</a>
+                  <router-link to="/product" class="nav-link"
+                    >入耳式</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">耳罩式</a>
+                  <router-link to="/product" class="nav-link"
+                    >耳罩式</router-link
+                  >
                 </li>
               </ul>
             </li>
             <!-- 觸控筆 -->
             <li class="nav-item">
-              <a
+              <router-link
+                to="/product"
                 class="nav-link d-flex justify-content-between"
-                data-bs-toggle="collapse"
-                role="button"
-                aria-expanded="false"
-              >
-                <span>觸控筆</span></a
+                >觸控筆</router-link
               >
             </li>
           </ul>
@@ -299,7 +320,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -315,7 +338,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -331,7 +356,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -347,7 +374,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -363,7 +392,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -379,7 +410,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -395,7 +428,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -411,7 +446,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -427,7 +464,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -443,7 +482,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -459,7 +500,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -475,7 +518,9 @@
                     iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
                   </h5>
                   <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <a href="#" class="btn btn-outline-secondary">查看商品</a>
+                  <router-link to="/product" class="btn btn-outline-secondary"
+                    >查看商品</router-link
+                  >
                 </div>
               </div>
             </div>
