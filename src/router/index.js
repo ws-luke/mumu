@@ -34,6 +34,23 @@ const router = createRouter({
       name: 'SignUp',
       component: () => import('../views/users/SignUpView.vue'),
     },
+    {
+      path: '/users/account',
+      name: 'account',
+      component: () => import('../views/users/AccountView.vue'),
+      children: [
+        {
+          path: '/users/account-orders',
+          name: 'account-orders',
+          component: () => import('../views/users/AccountOrdersView.vue'),
+        },
+        {
+          path: '/users/account-settings',
+          name: 'account-settings',
+          component: () => import('../views/users/AccountSettingsView.vue'),
+        },
+      ],
+    },
   ],
 })
 

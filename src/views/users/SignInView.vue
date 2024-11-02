@@ -23,20 +23,13 @@
       <p>
         <router-link to="/password">忘記密碼？</router-link>
       </p>
-      <button type="button" class="btn btn-secondary w-100 mb-4">登入</button>
-      <!-- <p class="text-center">或使用社群帳號登入</p>
-      <div class="d-flex justify-content-center">
-        <router-link to="/" class="icon">
-          <img src="../../../public/images/fb_icon.svg" alt="" />
-        </router-link>
-        <router-link to="/" class="icon">
-          <img src="../../../public/images/line_icon.svg" alt="" />
-        </router-link>
-      </div> -->
+      <button type="button" class="btn btn-secondary w-100 mb-4 btn-lg">
+        登入
+      </button>
       <p>還不是會員？</p>
       <router-link
         to="/users/signUp"
-        class="btn btn-outline-secondary w-100 mb-5"
+        class="btn btn-outline-secondary w-100 mb-5 btn-lg"
         >註冊會員</router-link
       >
     </div>

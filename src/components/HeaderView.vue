@@ -35,6 +35,16 @@
             <li class="nav-item">
               <router-link to="/products" class="nav-link">觸控筆</router-link>
             </li>
+            <li class="nav-item">
+              <router-link to="/users/account-orders" class="nav-link"
+                >訂單</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link to="/users/account-settings" class="nav-link"
+                >資訊</router-link
+              >
+            </li>
           </ul>
         </div>
         <div class="d-flex">
