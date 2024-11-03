@@ -15,16 +15,6 @@ const router = createRouter({
       component: () => import('../views/CartView.vue'),
     },
     {
-      path: '/products',
-      name: 'products',
-      component: () => import('../views/ProductsView.vue'),
-    },
-    {
-      path: '/product',
-      name: 'product',
-      component: () => import('../views/ProductView.vue'),
-    },
-    {
       path: '/users/signIn',
       name: 'SignIn',
       component: () => import('../views/users/SignInView.vue'),
@@ -50,6 +40,21 @@ const router = createRouter({
           component: () => import('../views/users/AccountSettingsView.vue'),
         },
       ],
+    },
+    {
+      path: '/shop/shop-products',
+      name: 'shop-products',
+      component: () => import('../views/shop/ShopProductsView.vue'),
+    },
+    {
+      path: '/shop/shop-product',
+      name: 'shop-product',
+      component: () => import('../views/shop/ShopProductView.vue'),
+    },
+    {
+      path: '/shop/shop-checkout',
+      name: 'shop-checkout',
+      component: () => import('../views/shop/ShopCheckoutView.vue'),
     },
   ],
 })

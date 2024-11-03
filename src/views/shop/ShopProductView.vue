@@ -45,7 +45,7 @@ export default {
               >
             </li>
             <li class="breadcrumb-item">
-              <router-link to="/products" class="text-decoration-none"
+              <router-link to="/shop/shop-products" class="text-decoration-none"
                 >產品列表</router-link
               >
             </li>
@@ -143,7 +143,7 @@ export default {
           </div>
           <div class="col-md-6">
             <router-link
-              to="/products"
+              to="/shop/shop-products"
               class="mb-2 d-block text-decoration-none"
               >線材類</router-link
             >
