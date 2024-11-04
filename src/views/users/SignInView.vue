@@ -24,7 +24,9 @@
         <router-link to="/users/forgot-password">忘記密碼？</router-link>
       </p>
       <button type="button" class="btn btn-primary w-100 mb-4">登入</button>
-      <p>還不是會員？ <router-link to="/users/signUp">註冊會員</router-link></p>
+      <p class="text-center">
+        還不是會員？ <router-link to="/users/signUp">註冊會員</router-link>
+      </p>
     </div>
   </div>
 </template>

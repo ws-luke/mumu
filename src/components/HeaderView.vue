@@ -59,7 +59,7 @@
         </div>
         <div class="d-flex">
           <!-- 個人 -->
-          <router-link to="/users/signIn" class="nav-link me-2">
+          <router-link to="/users/signIn" class="nav-link">
             <svg
               class="header__individual-icon"
               height="50px"
@@ -129,7 +129,7 @@
           </router-link>
         </div>
         <button
-          class="btn d-flex d-lg-none order-first"
+          class="btn d-flex d-lg-none order-first p-0"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasRight"

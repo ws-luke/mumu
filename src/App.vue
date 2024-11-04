@@ -12,7 +12,7 @@ import PhoneMenuView from '@/components/PhoneMenuView.vue'
   <!-- 手機板選單 -->
   <PhoneMenuView></PhoneMenuView>
   <div
-    class="offcanvas offcanvas-end"
+    class="offcanvas offcanvas-end cartOffcanvas"
     tabindex="-1"
     id="offcanvasCart"
     aria-labelledby="offcanvasCartLabel"
@@ -28,41 +28,185 @@ import PhoneMenuView from '@/components/PhoneMenuView.vue'
     </div>
     <div class="offcanvas-body">
       <ul class="navbar-nav">
-        <li class="nav-item d-flex justify-content-between border-bottom pb-3">
-          <div class="d-flex">
-            <a href="#">
-              <img
-                data-v-f5c716f9=""
-                src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                alt=""
-                class="img-fluid cartProductImg me-3"
-              />
-            </a>
-            <div class="">
-              <router-link to="/" class="text-decoration-none d-block mb-2">
-                <h6>C-C 60W 雙色編織充電線(粉灰)</h6>
-              </router-link>
-              <div class="productNum d-flex align-items-center">
-                <div class="quantity">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="quantity"
-                    value="500"
-                  />
+        <li class="py-3 ps-0 border-bottom">
+          <div class="align-items-center row">
+            <div class="col-lg-7 col-12 mb-3 mb-lg-0">
+              <div class="d-flex">
+                <img
+                  src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
+                  class="img-fluid productImg"
+                />
+                <div class="ms-3">
+                  <a class="text-decoration-none" href=""
+                    ><h6 class="mb-0">C-C 60W 雙色編織充電線(粉灰)</h6></a
+                  ><span><small class="text-muted">1m</small></span>
+                  <div class="mt-2 small lh-1">
+                    <a class="text-decoration-none" href="#!"
+                      ><span class="me-1 align-text-bottom"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="text-success"
+                        >
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                          ></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line
+                            x1="14"
+                            y1="11"
+                            x2="14"
+                            y2="17"
+                          ></line></svg></span
+                      ><span class="text-muted">刪除商品</span></a
+                    >
+                  </div>
                 </div>
-                <span class="mx-3">×</span>
-                <span>300,020</span>
               </div>
             </div>
+            <div class="col-lg-3 col-6">
+              <div class="productNumInput">
+                <input class="btn button-minus" type="button" value="-" /><input
+                  class="form-input quantity"
+                  type="number"
+                  value="1"
+                  name="quantity"
+                />
+                <input class="btn button-plus" type="button" value="+" />
+              </div>
+            </div>
+            <div class="text-center col-lg-2 col-6">
+              <span class="fw-bold">$4,000,000</span>
+            </div>
           </div>
-          <button class="btn">
-            <svg class="ct-icon" width="20" height="20" viewBox="0 0 24 24">
-              <path
-                d="M9.6,0l0,1.2H1.2v2.4h21.6V1.2h-8.4l0-1.2H9.6z M2.8,6l1.8,15.9C4.8,23.1,5.9,24,7.1,24h9.9c1.2,0,2.2-0.9,2.4-2.1L21.2,6H2.8z"
-              ></path>
-            </svg>
-          </button>
+        </li>
+        <li class="py-3 ps-0 border-bottom">
+          <div class="align-items-center row">
+            <div class="col-lg-7 col-12 mb-3 mb-lg-0">
+              <div class="d-flex">
+                <img
+                  src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
+                  class="img-fluid productImg"
+                />
+                <div class="ms-3">
+                  <a class="text-decoration-none" href=""
+                    ><h6 class="mb-0">C-C 60W 雙色編織充電線(粉灰)</h6></a
+                  ><span><small class="text-muted">1m</small></span>
+                  <div class="mt-2 small lh-1">
+                    <a class="text-decoration-none" href="#!"
+                      ><span class="me-1 align-text-bottom"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="text-success"
+                        >
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                          ></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line
+                            x1="14"
+                            y1="11"
+                            x2="14"
+                            y2="17"
+                          ></line></svg></span
+                      ><span class="text-muted">刪除商品</span></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="productNumInput">
+                <input class="btn button-minus" type="button" value="-" /><input
+                  class="form-input quantity"
+                  type="number"
+                  value="1"
+                  name="quantity"
+                />
+                <input class="btn button-plus" type="button" value="+" />
+              </div>
+            </div>
+            <div class="text-center col-lg-2 col-6">
+              <span class="fw-bold">$4,000,000</span>
+            </div>
+          </div>
+        </li>
+        <li class="py-3 ps-0 border-bottom">
+          <div class="align-items-center row">
+            <div class="col-lg-7 col-12 mb-3 mb-lg-0">
+              <div class="d-flex">
+                <img
+                  src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
+                  class="img-fluid productImg"
+                />
+                <div class="ms-3">
+                  <a class="text-decoration-none" href=""
+                    ><h6 class="mb-0">C-C 60W 雙色編織充電線(粉灰)</h6></a
+                  ><span><small class="text-muted">1m</small></span>
+                  <div class="mt-2 small lh-1">
+                    <a class="text-decoration-none" href="#!"
+                      ><span class="me-1 align-text-bottom"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="text-success"
+                        >
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                          ></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line
+                            x1="14"
+                            y1="11"
+                            x2="14"
+                            y2="17"
+                          ></line></svg></span
+                      ><span class="text-muted">刪除商品</span></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="productNumInput">
+                <input class="btn button-minus" type="button" value="-" /><input
+                  class="form-input quantity"
+                  type="number"
+                  value="1"
+                  name="quantity"
+                />
+                <input class="btn button-plus" type="button" value="+" />
+              </div>
+            </div>
+            <div class="text-center col-lg-2 col-6">
+              <span class="fw-bold">$4,000,000</span>
+            </div>
+          </div>
         </li>
       </ul>
       <div class="d-flex justify-content-between mt-4">
@@ -73,7 +217,7 @@ import PhoneMenuView from '@/components/PhoneMenuView.vue'
           >繼續購物</router-link
         >
         <router-link to="/shop/shop-cart" type="button" class="btn btn-dark"
-          >結帳</router-link
+          >前往購物車</router-link
         >
       </div>
     </div>
@@ -84,11 +228,46 @@ import PhoneMenuView from '@/components/PhoneMenuView.vue'
 .productNum .quantity {
   width: 80px;
 }
-.offcanvas {
-  width: 560px;
+.cartOffcanvas {
+  width: 650px;
 }
 .cartProductImg {
   width: 64px;
   height: 64px;
+}
+.productImg {
+  width: 4rem;
+  height: 4rem;
+}
+.productNumInput {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.productNumInput .form-input {
+  width: 4rem !important;
+  min-height: 2rem;
+  text-align: center;
+  border: 1px solid #ecf0ef;
+  background: 0 0;
+}
+.button-minus,
+.button-plus {
+  padding: 0.25rem 0.5rem;
+  width: 1.8rem;
+  height: 100%;
+  min-height: 2rem;
+  text-align: center;
+  border: 1px solid #ecf0ef;
+  background: 0 0;
+}
+.button-minus {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.button-plus {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 </style>
