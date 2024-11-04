@@ -50,7 +50,7 @@
     <div class="row row-cols-1 mb-5">
       <div class="mb-3 col d-flex">
         <p class="me-4">姓名</p>
-        <p>張吉男</p>
+        <p>張先生</p>
       </div>
       <div class="mb-3 col d-flex">
         <p class="me-4">名稱</p>

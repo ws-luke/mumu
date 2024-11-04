@@ -21,17 +21,10 @@
         <label for="floatingPassword">密碼</label>
       </div>
       <p>
-        <router-link to="/password">忘記密碼？</router-link>
+        <router-link to="/users/forgot-password">忘記密碼？</router-link>
       </p>
-      <button type="button" class="btn btn-secondary w-100 mb-4 btn-lg">
-        登入
-      </button>
-      <p>還不是會員？</p>
-      <router-link
-        to="/users/signUp"
-        class="btn btn-outline-secondary w-100 mb-5 btn-lg"
-        >註冊會員</router-link
-      >
+      <button type="button" class="btn btn-primary w-100 mb-4">登入</button>
+      <p>還不是會員？ <router-link to="/users/signUp">註冊會員</router-link></p>
     </div>
   </div>
 </template>

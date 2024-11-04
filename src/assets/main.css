@@ -1,0 +1,11 @@
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.accordion-button:not(.collapsed){
+  background-color: #FFF;
+  color: #000;
+}
+.accordion-button:focus{
+  box-shadow: none;
+}

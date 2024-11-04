@@ -72,7 +72,7 @@ import PhoneMenuView from '@/components/PhoneMenuView.vue'
           class="btn btn-primary"
           >繼續購物</router-link
         >
-        <router-link to="/shop/shop-checkout" type="button" class="btn btn-dark"
+        <router-link to="/shop/shop-cart" type="button" class="btn btn-dark"
           >結帳</router-link
         >
       </div>

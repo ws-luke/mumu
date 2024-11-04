@@ -189,7 +189,7 @@ export default {
             />
             <div class="mt-3 g-2 align-items-center row">
               <div class="d-grid col-xxl-4 col-lg-6 col-md-8 col-6">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" class="btn btn-primary">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
