@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '@/views/frontend/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    //前台
     {
       path: '/',
       name: 'home',
@@ -12,74 +13,81 @@ const router = createRouter({
     {
       path: '/cart', // 購物車
       name: 'cart',
-      component: () => import('../views/CartView.vue'),
+      component: () => import('@/views/frontend/CartView.vue'),
     },
     {
       path: '/users/signIn', // 會員登入
       name: 'SignIn',
-      component: () => import('../views/users/SignInView.vue'),
+      component: () => import('@/views/frontend/users/SignInView.vue'),
     },
     {
       path: '/users/signUp', // 會員註冊
       name: 'SignUp',
-      component: () => import('../views/users/SignUpView.vue'),
+      component: () => import('@/views/frontend/users/SignUpView.vue'),
     },
     {
       path: '/users/forgot-password', // 會員忘記密碼
       name: 'forgot-password',
-      component: () => import('../views/users/password/ForgotPasswordView.vue'),
+      component: () => import('@/views/frontend/users/password/ForgotPasswordView.vue'),
     },
     {
       path: '/users/set-new-password', // 設定新密碼
       name: 'set-new-password',
-      component: () => import('../views/users/password/SetNewPasswordView.vue'),
+      component: () => import('@/views/frontend/users/password/SetNewPasswordView.vue'),
     },
     {
       path: '/users/finish-password', // 新密碼設定完成
       name: 'finish-password',
       component: () =>
-        import('../views/users/password/FinishNewPasswordView.vue'),
+        import('@/views/frontend/users/password/FinishNewPasswordView.vue'),
     },
     {
       path: '/users/account', // 會員
       name: 'account',
-      component: () => import('../views/users/account/AccountView.vue'),
+      component: () => import('@/views/frontend/users/account/AccountView.vue'),
       children: [
         {
           path: '/users/account-orders', // 會員訂單
           name: 'account-orders',
           component: () =>
-            import('../views/users/account/AccountOrdersView.vue'),
+            import('@/views/frontend/users/account/AccountOrdersView.vue'),
         },
         {
           path: '/users/account-settings', // 會員資訊
           name: 'account-settings',
           component: () =>
-            import('../views/users/account/AccountSettingsView.vue'),
+            import('@/views/frontend/users/account/AccountSettingsView.vue'),
         },
       ],
     },
     {
       path: '/shop/shop-products', // 商品列表
       name: 'shop-products',
-      component: () => import('../views/shop/ShopProductsView.vue'),
+      component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
     },
     {
       path: '/shop/shop-product', // 商品介紹頁
       name: 'shop-product',
-      component: () => import('../views/shop/ShopProductView.vue'),
+      component: () => import('@/views/frontend/shop/ShopProductView.vue'),
     },
     {
       path: '/shop/shop-cart', // 購物車
       name: 'shop-cart',
-      component: () => import('../views/shop/ShopCartView.vue'),
+      component: () => import('@/views/frontend/shop/ShopCartView.vue'),
     },
     {
       path: '/shop/shop-checkout', // 結帳
       name: 'shop-checkout',
-      component: () => import('../views/shop/ShopCheckoutView.vue'),
+      component: () => import('@/views/frontend/shop/ShopCheckoutView.vue'),
     },
+    //後台
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/admin/AdminView.vue'),
+    }
   ],
 })
+
 
 export default router
