@@ -1,9 +1,9 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import HeaderView from '@/components/HeaderView.vue'
-import FooterView from '@/components/FooterView.vue'
-import PhoneMenuView from '@/components/PhoneMenuView.vue'
-import CartOffcanvasView from '@/components/CartOffcanvasView.vue'
+import HeaderView from '@/components/frontend/HeaderView.vue'
+import FooterView from '@/components/frontend/FooterView.vue'
+import PhoneMenuView from '@/components/frontend/PhoneMenuView.vue'
+import CartOffcanvasView from '@/components/frontend/CartOffcanvasView.vue'
 </script>
 
 <template>

@@ -82,9 +82,9 @@ const router = createRouter({
     },
     //後台
     {
-      path: '/admin',
-      name: 'admin',
-      component: () => import('@/views/admin/AdminView.vue'),
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      component: () => import('@/views/admin/DashboardView.vue'),
     }
   ],
 })
