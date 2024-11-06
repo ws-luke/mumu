@@ -1,11 +1,15 @@
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+* {
+  font-family: 'Noto Sans TC', '微軟正黑體', 'Arial', sans-serif;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-.accordion-button:not(.collapsed){
-  background-color: #FFF;
+.accordion-button:not(.collapsed) {
+  background-color: #fff;
   color: #000;
 }
-.accordion-button:focus{
+.accordion-button:focus {
   box-shadow: none;
 }

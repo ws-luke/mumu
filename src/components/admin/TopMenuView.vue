@@ -60,19 +60,34 @@
           </ul>
         </div>
         <div class="dropdown ms-4">
-          <a class="" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <a
+            class=""
+            id="userDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             <img
               src="https://freshcart-next-js-template.netlify.app/images/avatar/avatar-1.jpg"
               class="avatar rounded-circle"
               alt=""
             />
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="#">首頁</a></li>
-            <li><a class="dropdown-item" href="#">設定</a></li>
-            <hr />
-            <li><a class="dropdown-item text-primary" href="#">登出</a></li>
-          </ul>
+          <div
+            class="dropdown-menu dropdown-menu-end py-0"
+            aria-labelledby="userDropdown"
+          >
+            <div class="lh-1 p-3 border-bottom">
+              <h5 class="mb-1 h6 fw-bold">LUKE</h5>
+              <small>weisound.luke@gmail.com</small>
+            </div>
+            <ul class="p-2 list-unstyled mb-0">
+              <li><a class="dropdown-item px-1" href="#">首頁</a></li>
+              <li><a class="dropdown-item px-1" href="#">設定</a></li>
+            </ul>
+            <div class="border-top p-3">
+              <a class="dropdown-item text-primary p-0" href="#">登出</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

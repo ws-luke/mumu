@@ -6,7 +6,10 @@
     <div class="flex-grow-1">
       <ul class="nav nav-pills flex-column w-100 px-4">
         <li class="nav-item">
-          <a class="nav-link active d-flex align-items-center gap-3 mb-2" href="#">
+          <router-link
+            to="/admin/dashboard"
+            class="nav-link active d-flex align-items-center gap-3 mb-2"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -20,7 +23,7 @@
               />
             </svg>
             <span>首頁</span>
-          </a>
+          </router-link>
         </li>
         <h5 class="fs-6 fw-bold mt-4 listTitle">商品管理</h5>
         <li class="nav-item">
@@ -138,5 +141,4 @@
   color: var(--bs-white);
   background-color: var(--bs-nav-pills-link-active-bg);
 }
-
 </style>
