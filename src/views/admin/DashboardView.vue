@@ -233,13 +233,6 @@ onMounted(() => {
   </div>
 </template>
 <style scoped>
-.card {
-  box-shadow:
-    0 0 2px rgba(145, 158, 171, 0.2),
-    0 12px 24px -4px rgba(145, 158, 171, 0.12);
-  border-radius: 1rem;
-  border: 0;
-}
 .cardTitleIcon {
   width: 2.5rem;
   height: 2.5rem;
@@ -252,7 +245,5 @@ onMounted(() => {
   height: 350px;
 }
 
-.table > :not(caption) > * > * {
-  padding: 0.75rem 1.5rem;
-}
+
 </style>

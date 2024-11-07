@@ -21,7 +21,6 @@
             placeholder="Search"
             aria-label="Search"
           />
-          <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>
       <div class="d-flex">
@@ -95,11 +94,15 @@
 </template>
 <style scoped>
 .topMenu {
+  background-color: hsla(0, 0%, 100%, .8);
+  -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   width: calc(100% - 280px);
   height: 72px;
   position: fixed;
   right: 0;
   top: 0;
+  z-index: 1;
 }
 @media (max-width: 1200px) {
   .topMenu {

@@ -20,7 +20,7 @@ import LeftMenuView from '@/components/admin/LeftMenuView.vue'
     }
     .mainContentWrapper{
         flex-grow: 1;
-        padding: 100px 16px;
+        padding: 90px 16px;
         width: calc(100% - 280px);
     }
 </style>

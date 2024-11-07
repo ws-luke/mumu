@@ -82,9 +82,45 @@ const router = createRouter({
     },
     //後台
     {
-      path: '/admin/dashboard',
-      name: 'admin-dashboard',
-      component: () => import('@/views/admin/DashboardView.vue'),
+      path: '/admin',
+      name: 'admin',
+      children: [
+        {
+          path: '/admin/dashboard', // 儀錶版
+          name: 'dashboard',
+          component: () => import('@/views/admin/DashboardView.vue'),
+        },
+        {
+          path: '/admin/categories', // 產品類別
+          name: 'categories',
+          component: () => import('@/views/admin/categories/CategoriesView.vue'),
+        },
+        {
+          path: '/admin/add-categorie', // 新增產品類別
+          name: 'add-categories',
+          component: () => import('@/views/admin/categories/addCategorieView.vue'),
+        },
+        {
+          path: '/admin/products', // 產品
+          name: 'products',
+          component: () => import('@/views/admin/products/ProductsView.vue'),
+        },
+        {
+          path: '/admin/orders', // 訂單
+          name: 'orders',
+          component: () => import('@/views/admin/orders/OrdersView.vue'),
+        },
+        {
+          path: '/admin/customers', // 會員
+          name: 'customers',
+          component: () => import('@/views/admin/customers/CustomersView.vue'),
+        },
+        {
+          path: '/admin/dashboard', // 管理者
+          name: 'dashboard',
+          component: () => import('@/views/admin/DashboardView.vue'),
+        },
+      ],
     }
   ],
 })
