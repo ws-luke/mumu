@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row mb-4">
       <div class="col">
         <div class="d-flex align-items-center justify-content-between">
@@ -7,12 +7,21 @@
             <h2>類別</h2>
             <nav>
               <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#">首頁</a></li>
+                <li class="breadcrumb-item">
+                  <router-link to="/admin/dashboard">首頁</router-link>
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">類別</li>
               </ol>
             </nav>
           </div>
-          <router-link to="/admin/add-categorie" class="btn btn-primary">新增分類</router-link>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#categoriesModal"
+          >
+            新增分類
+          </button>
         </div>
       </div>
     </div>
@@ -23,7 +32,11 @@
             <div class="justify-content-between row">
               <div class="mb-2 mb-lg-0 col-lg-4 col-md-6 col-12">
                 <form class="d-flex">
-                  <input placeholder="搜尋類別" class="form-control" type="search" />
+                  <input
+                    placeholder="搜尋類別"
+                    class="form-control"
+                    type="search"
+                  />
                 </form>
               </div>
               <div class="col-lg-2 col-md-4 col-12">
@@ -36,105 +49,135 @@
             </div>
           </div>
           <div class="card-body p-0">
-            <table class="table table-borderless">
+            <table class="table table-borderless align-middle table-hover">
               <thead class="table-light">
                 <tr>
                   <th colspan="1">
                     <input class="form-check-input" type="checkbox" />
                   </th>
-                  <th colspan="1">類別</th>
-                  <th colspan="1">產品數量</th>
+                  <th colspan="1">名稱</th>
                   <th colspan="1">狀態</th>
                   <th colspan="1"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>
+                  <td colspan="1">
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>線材類</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#cableSubMenu"
+                      aria-expanded="false"
+                      aria-controls="cableSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="cableSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>USB A – Type C</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>USB C – Type C</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>USB A – Lightning</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>USB C - Lightning</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -142,87 +185,84 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>掛繩類</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#lanyardSubMenu"
+                      aria-expanded="false"
+                      aria-controls="lanyardSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="lanyardSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>充電掛繩</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>一般掛繩</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -230,87 +270,101 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>手機殼</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#phoneCaseSubMenu"
+                      aria-expanded="false"
+                      aria-controls="phoneCaseSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="phoneCaseSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>iphone 14</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>iphone 15</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>iphone 16</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -318,87 +372,101 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>充電頭</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#chargerSubMenu"
+                      aria-expanded="false"
+                      aria-controls="chargerSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="chargerSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>20W</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>33W</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>65W</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -406,87 +474,101 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>螢幕保護貼</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#screenProtectorSubMenu"
+                      aria-expanded="false"
+                      aria-controls="screenProtectorSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="screenProtectorSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>iphone 14</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>iphone 15</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>iphone 16</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -494,87 +576,67 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>行動電源</td>
-                  <td>500</td>
                   <td><span class="badge bg-danger">未上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#powerBankSubMenu"
+                      aria-expanded="false"
+                      aria-controls="powerBankSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="powerBankSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>10000mAh</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -582,87 +644,84 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>藍芽耳機</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#bluetoothEarphonesSubMenu"
+                      aria-expanded="false"
+                      aria-controls="bluetoothEarphonesSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="bluetoothEarphonesSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>入耳式</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
+                            >
                               編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </td>
+                          <td>耳罩式</td>
+                          <td><span class="badge bg-success">已上架</span></td>
+                          <td colspan="1" class="text-end">
+                            <button
+                              class="btn text-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              編輯
+                            </button>
+                            <button class="btn text-danger">刪除</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
                 <tr>
@@ -670,87 +729,55 @@
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>觸控筆</td>
-                  <td>500</td>
                   <td><span class="badge bg-success">已上架</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <a
-                        class="text-reset"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        href="#"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></a>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
+                  <td colspan="1" class="text-end">
+                    <button
+                      class="btn text-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#categoriesModal"
+                    >
+                      編輯</button
+                    ><button class="btn text-danger">刪除</button>
+                    <button
+                      class="btn text-secondary"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#stylusSubMenu"
+                      aria-expanded="false"
+                      aria-controls="stylusSubMenu"
+                    >
+                      子選單
+                    </button>
+                  </td>
+                </tr>
+                <tr id="stylusSubMenu" class="collapse">
+                  <td colspan="4" class="p-0">
+                    <table class="table mb-0 table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th colspan="1">
+                            <input class="form-check-input" type="checkbox" />
+                          </th>
+                          <th colspan="1">名稱</th>
+                          <th colspan="1">狀態</th>
+                          <th colspan="1" class="text-end">
+                            <button
+                              class="btn btn-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#submenuModal"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                              新增子選單
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="4" class="text-center border-0">
+                            無資料
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
               </tbody>
@@ -784,7 +811,9 @@
                     >
                   </li>
                   <li class="page-item mx-1 border-round">
-                    <a class="page-link" role="button" tabindex="0" href="#">2</a>
+                    <a class="page-link" role="button" tabindex="0" href="#"
+                      >2</a
+                    >
                   </li>
                   <li class="page-item mx-1 border-round">
                     <a class="page-link" role="button" tabindex="0" href="#">
@@ -806,6 +835,96 @@
                 </ul>
               </nav>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 分類視窗 -->
+    <div
+      class="modal fade"
+      id="categoriesModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">新增類別</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="mb-4 col-12">
+                <label class="form-label">類別名稱</label
+                ><input placeholder="" class="form-control" type="text" />
+              </div>
+              <div class="mb-4 col-12">
+                <label class="form-label">排序</label
+                ><input placeholder="" class="form-control" type="number" />
+              </div>
+              <div class="mb-4 col-12">
+                <label class="form-label">狀態</label>
+                <select class="form-select">
+                  <option selected>選擇</option>
+                  <option value="上架">上架</option>
+                  <option value="下架">下架</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">儲存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 子選單視窗 -->
+    <div
+      class="modal fade"
+      id="submenuModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">新增子選單</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="mb-4 col-12">
+                <label class="form-label">名稱</label
+                ><input placeholder="" class="form-control" type="text" />
+              </div>
+              <div class="mb-4 col-12">
+                <label class="form-label">排序</label
+                ><input placeholder="" class="form-control" type="number" />
+              </div>
+              <div class="mb-4 col-12">
+                <label class="form-label">狀態</label>
+                <select class="form-select">
+                  <option selected>選擇</option>
+                  <option value="上架">上架</option>
+                  <option value="下架">下架</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">儲存</button>
           </div>
         </div>
       </div>

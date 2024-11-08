@@ -80,7 +80,11 @@
               <small>weisound.luke@gmail.com</small>
             </div>
             <ul class="p-2 list-unstyled mb-0">
-              <li><a class="dropdown-item px-1" href="#">首頁</a></li>
+              <li>
+                <router-link class="dropdown-item px-1" to="/admin/dashboard"
+                  >首頁</router-link
+                >
+              </li>
               <li><a class="dropdown-item px-1" href="#">設定</a></li>
             </ul>
             <div class="border-top p-3">
@@ -94,9 +98,9 @@
 </template>
 <style scoped>
 .topMenu {
-  background-color: hsla(0, 0%, 100%, .8);
+  background-color: hsla(0, 0%, 100%, 0.8);
   -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   width: calc(100% - 280px);
   height: 72px;
   position: fixed;

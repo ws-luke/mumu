@@ -1,3 +1,6 @@
+<script setup>
+import LogoComponent from '@/components/LogoComponent.vue'
+</script>
 <template>
   <div
     class="offcanvas offcanvas-end"
@@ -6,7 +9,9 @@
     aria-labelledby="offcanvasRightLabel"
   >
     <div class="offcanvas-header">
-      <h5 id="offcanvasRightLabel" class="m-0">MUMU</h5>
+      <h5 id="offcanvasRightLabel" class="m-0">
+        <LogoComponent></LogoComponent>
+      </h5>
       <button
         type="button"
         class="btn-close text-reset"
@@ -158,7 +163,9 @@
             <div class="accordion-body p-0">
               <ul class="navbar-nav px-3">
                 <li class="nav-item">
-                  <router-link to="/shop/shop-products" class="nav-link">65W</router-link>
+                  <router-link to="/shop/shop-products" class="nav-link"
+                    >65W</router-link
+                  >
                 </li>
               </ul>
             </div>
@@ -291,7 +298,9 @@
             <div class="accordion-body p-0">
               <ul class="navbar-nav px-3">
                 <li class="nav-item">
-                  <router-link to="/shop/shop-products" class="nav-link">IOS</router-link>
+                  <router-link to="/shop/shop-products" class="nav-link"
+                    >IOS</router-link
+                  >
                 </li>
                 <li class="nav-item">
                   <router-link to="/shop/shop-products" class="nav-link"

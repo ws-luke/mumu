@@ -54,7 +54,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row row-cols-3 mb-4">
       <div class="col">
         <div class="card h-100">
@@ -146,7 +146,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-8">
+      <div class="col">
         <div class="card h-100">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between">
@@ -169,7 +169,6 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="col-4"></div>
     </div>
     <div class="row">
       <div class="col">
@@ -244,6 +243,4 @@ onMounted(() => {
 .card-content-image {
   height: 350px;
 }
-
-
 </style>

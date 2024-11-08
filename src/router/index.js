@@ -28,12 +28,14 @@ const router = createRouter({
     {
       path: '/users/forgot-password', // 會員忘記密碼
       name: 'forgot-password',
-      component: () => import('@/views/frontend/users/password/ForgotPasswordView.vue'),
+      component: () =>
+        import('@/views/frontend/users/password/ForgotPasswordView.vue'),
     },
     {
       path: '/users/set-new-password', // 設定新密碼
       name: 'set-new-password',
-      component: () => import('@/views/frontend/users/password/SetNewPasswordView.vue'),
+      component: () =>
+        import('@/views/frontend/users/password/SetNewPasswordView.vue'),
     },
     {
       path: '/users/finish-password', // 新密碼設定完成
@@ -93,22 +95,28 @@ const router = createRouter({
         {
           path: '/admin/categories', // 產品類別
           name: 'categories',
-          component: () => import('@/views/admin/categories/CategoriesView.vue'),
+          component: () =>
+            import('@/views/admin/categories/CategoriesView.vue'),
         },
         {
-          path: '/admin/add-categorie', // 新增產品類別
-          name: 'add-categories',
-          component: () => import('@/views/admin/categories/addCategorieView.vue'),
-        },
-        {
-          path: '/admin/products', // 產品
+          path: '/admin/products', // 產品列表
           name: 'products',
           component: () => import('@/views/admin/products/ProductsView.vue'),
         },
         {
-          path: '/admin/orders', // 訂單
+          path: '/admin/add-product', // 新增產品
+          name: 'add-product',
+          component: () => import('@/views/admin/products/AddProductView.vue'),
+        },
+        {
+          path: '/admin/orders', // 訂單列表
           name: 'orders',
           component: () => import('@/views/admin/orders/OrdersView.vue'),
+        },
+        {
+          path: '/admin/order', // 訂單
+          name: 'order',
+          component: () => import('@/views/admin/orders/OrderView.vue'),
         },
         {
           path: '/admin/customers', // 會員
@@ -116,14 +124,18 @@ const router = createRouter({
           component: () => import('@/views/admin/customers/CustomersView.vue'),
         },
         {
+          path: '/admin/customer', // 會員
+          name: 'customer',
+          component: () => import('@/views/admin/customers/CustomerView.vue'),
+        },
+        {
           path: '/admin/dashboard', // 管理者
           name: 'dashboard',
           component: () => import('@/views/admin/DashboardView.vue'),
         },
       ],
-    }
+    },
   ],
 })
-
 
 export default router

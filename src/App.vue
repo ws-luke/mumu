@@ -11,10 +11,11 @@ const route = useRoute()
 const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 
 // 動態設定要使用的佈局組件
-const layoutComponent = computed(() => (isAdminRoute.value ? AdminLayout : FrontendLayout))
+const layoutComponent = computed(() =>
+  isAdminRoute.value ? AdminLayout : FrontendLayout,
+)
 </script>
 
 <template>
   <component :is="layoutComponent" />
 </template>
-
