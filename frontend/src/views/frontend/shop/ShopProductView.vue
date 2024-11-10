@@ -154,6 +154,13 @@ export default {
               <span><small class="fs-6 ms-2 text-danger">40% Off</small></span>
             </div>
             <hr class="my-4" />
+            <h5 class="">購買數量不同價格</h5>
+            <ul>
+              <li>1 - 49 : $160</li>
+              <li>50 - 299 : $150</li>
+              <li>300 - 499 : $145</li>
+              <li>500 : $130</li>
+            </ul>
             <div class="my-4 d-flex gap-1">
               <input
                 type="radio"
