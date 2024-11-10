@@ -48,7 +48,12 @@
                             d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                           ></path>
                           <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line></svg></span
+                          <line
+                            x1="14"
+                            y1="11"
+                            x2="14"
+                            y2="17"
+                          ></line></svg></span
                       ><span class="text-muted">刪除商品</span></a
                     >
                   </div>
@@ -103,7 +108,12 @@
                             d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                           ></path>
                           <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line></svg></span
+                          <line
+                            x1="14"
+                            y1="11"
+                            x2="14"
+                            y2="17"
+                          ></line></svg></span
                       ><span class="text-muted">刪除商品</span></a
                     >
                   </div>
@@ -158,7 +168,12 @@
                             d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                           ></path>
                           <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line></svg></span
+                          <line
+                            x1="14"
+                            y1="11"
+                            x2="14"
+                            y2="17"
+                          ></line></svg></span
                       ><span class="text-muted">刪除商品</span></a
                     >
                   </div>
@@ -183,7 +198,10 @@
         </li>
       </ul>
       <div class="d-flex justify-content-between mt-4">
-        <router-link to="/shop/shop-products" type="button" class="btn btn-primary"
+        <router-link
+          to="/shop/shop-products"
+          type="button"
+          class="btn btn-primary"
           >繼續購物</router-link
         >
         <router-link to="/shop/shop-cart" type="button" class="btn btn-dark"

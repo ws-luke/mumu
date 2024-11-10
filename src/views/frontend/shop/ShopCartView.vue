@@ -50,7 +50,12 @@
                                 d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                               ></path>
                               <line x1="10" y1="11" x2="10" y2="17"></line>
-                              <line x1="14" y1="11" x2="14" y2="17"></line></svg></span
+                              <line
+                                x1="14"
+                                y1="11"
+                                x2="14"
+                                y2="17"
+                              ></line></svg></span
                           ><span class="text-muted">刪除商品</span></a
                         >
                       </div>
@@ -59,7 +64,11 @@
                 </div>
                 <div class="col-lg-3 col-6">
                   <div class="productNumInput">
-                    <input class="btn button-minus" type="button" value="-" /><input
+                    <input
+                      class="btn button-minus"
+                      type="button"
+                      value="-"
+                    /><input
                       class="form-input quantity"
                       type="number"
                       value="1"
@@ -105,7 +114,12 @@
                                 d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                               ></path>
                               <line x1="10" y1="11" x2="10" y2="17"></line>
-                              <line x1="14" y1="11" x2="14" y2="17"></line></svg></span
+                              <line
+                                x1="14"
+                                y1="11"
+                                x2="14"
+                                y2="17"
+                              ></line></svg></span
                           ><span class="text-muted">刪除商品</span></a
                         >
                       </div>
@@ -114,7 +128,11 @@
                 </div>
                 <div class="col-lg-3 col-6">
                   <div class="productNumInput">
-                    <input class="btn button-minus" type="button" value="-" /><input
+                    <input
+                      class="btn button-minus"
+                      type="button"
+                      value="-"
+                    /><input
                       class="form-input quantity"
                       type="number"
                       value="1"
@@ -160,7 +178,12 @@
                                 d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                               ></path>
                               <line x1="10" y1="11" x2="10" y2="17"></line>
-                              <line x1="14" y1="11" x2="14" y2="17"></line></svg></span
+                              <line
+                                x1="14"
+                                y1="11"
+                                x2="14"
+                                y2="17"
+                              ></line></svg></span
                           ><span class="text-muted">刪除商品</span></a
                         >
                       </div>
@@ -169,7 +192,11 @@
                 </div>
                 <div class="col-lg-3 col-6">
                   <div class="productNumInput">
-                    <input class="btn button-minus" type="button" value="-" /><input
+                    <input
+                      class="btn button-minus"
+                      type="button"
+                      value="-"
+                    /><input
                       class="form-input quantity"
                       type="number"
                       value="1"
@@ -185,7 +212,10 @@
             </li>
           </ul>
           <div class="d-flex justify-content-between mb-4">
-            <router-link to="/shop/shop-products" type="button" class="btn btn-primary"
+            <router-link
+              to="/shop/shop-products"
+              type="button"
+              class="btn btn-primary"
               >繼續購物</router-link
             >
             <router-link to="/shop/shop-checkout" class="btn btn-dark"
@@ -218,13 +248,19 @@
                   </li>
                 </ul>
               </div>
-              <router-link to="/shop/shop-checkout" class="btn btn-primary w-100 d-flex">
+              <router-link
+                to="/shop/shop-checkout"
+                class="btn btn-primary w-100 d-flex"
+              >
                 <font class="me-auto">前往結帳</font>
                 <span>$4,203,000</span>
               </router-link>
               <div class="mt-4">
                 <h5 class="card-title fw-bold mb-3">折扣碼</h5>
-                <label for="discountCode" class="form-label visually-hidden"></label>
+                <label
+                  for="discountCode"
+                  class="form-label visually-hidden"
+                ></label>
                 <input
                   type="text"
                   class="form-control mb-3"

@@ -5,22 +5,22 @@ import LeftMenuView from '@/components/admin/LeftMenuView.vue'
 </script>
 
 <template>
-    <TopMenuView></TopMenuView>
-    <div class="mainWrapper">
-        <LeftMenuView></LeftMenuView>
-        <div class="mainContentWrapper">
-            <RouterView />
-        </div>
+  <TopMenuView></TopMenuView>
+  <div class="mainWrapper">
+    <LeftMenuView></LeftMenuView>
+    <div class="mainContentWrapper">
+      <RouterView />
     </div>
+  </div>
 </template>
 <style scoped>
-    .mainWrapper{
-        display: flex;
-        min-height: 100%;
-    }
-    .mainContentWrapper{
-        flex-grow: 1;
-        padding: 90px 16px;
-        width: calc(100% - 280px);
-    }
+.mainWrapper {
+  display: flex;
+  min-height: 100%;
+}
+.mainContentWrapper {
+  flex-grow: 1;
+  padding: 90px 16px;
+  width: calc(100% - 280px);
+}
 </style>

@@ -1028,7 +1028,7 @@
               <div>顯示1到 10 個項目 （共14 個項目）</div>
               <nav class="mt-2 mt-md-0 navbar navbar-expand">
                 <ul class="mb-0 pagination">
-                  <li class="page-item mx-1 border-round disabled">
+                  <li class="page-item mx-1 disabled">
                     <span class="page-link">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1045,17 +1045,17 @@
                       </svg>
                     </span>
                   </li>
-                  <li class="page-item mx-1 border-round active">
-                    <span class="page-link"
+                  <li class="page-item mx-1 active">
+                    <span class="page-link rounded-1"
                       >1<span class="visually-hidden">(current)</span></span
                     >
                   </li>
-                  <li class="page-item mx-1 border-round">
-                    <a class="page-link" role="button" tabindex="0" href="#"
+                  <li class="page-item mx-1">
+                    <a class="page-link rounded-1" role="button" tabindex="0" href="#"
                       >2</a
                     >
                   </li>
-                  <li class="page-item mx-1 border-round">
+                  <li class="page-item mx-1">
                     <a class="page-link" role="button" tabindex="0" href="#">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

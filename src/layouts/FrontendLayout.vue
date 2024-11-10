@@ -7,11 +7,11 @@ import CartOffcanvasView from '@/components/frontend/CartOffcanvasView.vue'
 </script>
 
 <template>
-    <HeaderView></HeaderView>
-    <RouterView />
-    <FooterView></FooterView>
-    <!-- 手機板選單 -->
-    <PhoneMenuView></PhoneMenuView>
-    <!-- 購物車選單 -->
-    <CartOffcanvasView></CartOffcanvasView>
+  <HeaderView></HeaderView>
+  <RouterView />
+  <FooterView></FooterView>
+  <!-- 手機板選單 -->
+  <PhoneMenuView></PhoneMenuView>
+  <!-- 購物車選單 -->
+  <CartOffcanvasView></CartOffcanvasView>
 </template>
