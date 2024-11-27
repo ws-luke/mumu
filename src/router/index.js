@@ -86,6 +86,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
+      component: () => import('@/views/admin/LayoutView.vue'),
       children: [
         {
           path: '/admin/dashboard', // 儀錶版
@@ -132,9 +133,19 @@ const router = createRouter({
           path: '/admin/dashboard', // 管理者
           name: 'dashboard',
           component: () => import('@/views/admin/DashboardView.vue'),
-        },
+        }
       ],
     },
+    {
+      path: '/admin/signup', // 註冊
+      name: 'signup',
+      component: () => import('@/views/admin/SignUpView.vue'),
+    },
+    {
+      path: '/admin/signin', // 登入
+      name: 'signin',
+      component: () => import('@/views/admin/SignInView.vue'),
+    }
   ],
 })
 
