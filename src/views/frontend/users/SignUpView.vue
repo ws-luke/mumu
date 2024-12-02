@@ -17,10 +17,11 @@ const userDate = ref({
   ubn: '', //統編
   businessLiaison: '', //對接業務
 })
+
 const signUpInfo = async () => {
   try {
     const res = await axios.post(`${api_path}/sign_up`, userDate.value)
-    if (res.data.status === true) {
+    if (res.data.success === true) {
       router.push({ name: 'SignIn' })
       toast.success('註冊成功，請至登入頁登入', {
         theme: 'auto',
@@ -46,21 +47,16 @@ const signUpInfo = async () => {
       <h1 class="mb-3 h2 fw-bold">註冊會員</h1>
       <from class="row row-cols-1 row-cols-md-2">
         <div class="col">
-          <div class="row mb-4">
-            <div class="col-12 col-md-7 col-xl-9 mb-3 mb-md-0">
-              <label class="form-label fw-bold fs-5" for="floatingInput"
-                >Email</label
-              >
-              <input
-                v-model="userDate.email"
-                type="email"
-                class="form-control"
-                id="floatingInput"
-              />
-            </div>
-            <div class="col-12 col-md-5 col-xl-3 align-content-end">
-              <button type="button" class="btn btn-secondary">Email認證</button>
-            </div>
+          <div class="mb-4">
+            <label class="form-label fw-bold fs-5" for="floatingInput"
+              >Email</label
+            >
+            <input
+              v-model="userDate.email"
+              type="email"
+              class="form-control"
+              id="floatingInput"
+            />
           </div>
         </div>
         <div class="col">

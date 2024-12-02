@@ -133,19 +133,19 @@ const router = createRouter({
           path: '/admin/dashboard', // 管理者
           name: 'dashboard',
           component: () => import('@/views/admin/DashboardView.vue'),
-        }
+        },
       ],
     },
     {
       path: '/admin/signup', // 註冊
-      name: 'signup',
+      name: 'adminSignup',
       component: () => import('@/views/admin/SignUpView.vue'),
     },
     {
       path: '/admin/signin', // 登入
-      name: 'signin',
+      name: 'adminSignin',
       component: () => import('@/views/admin/SignInView.vue'),
-    }
+    },
   ],
 })
 
