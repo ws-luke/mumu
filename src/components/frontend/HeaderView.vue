@@ -1,5 +1,19 @@
 <script setup>
-import LogoComponent from '@/components/LogoComponent.vue'
+  import LogoComponent from '@/components/LogoComponent.vue'
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+
+  const menuData = ref([]);
+  const api = `${import.meta.env.VITE_API_URL}categories/all`;
+
+  onMounted (async () => {
+      try {
+          const { data: categories } = await axios.get(api);
+          menuData.value = Object.values(categories.data);
+      } catch (error) {
+          console.error('API 請求失敗:', error);
+      }
+  })
 </script>
 <template>
   <div>
@@ -10,55 +24,10 @@ import LogoComponent from '@/components/LogoComponent.vue'
         ></router-link>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >線材類</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >掛繩類</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >手機殼</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >充電頭</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >螢幕保護貼</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >行動電源</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >藍芽耳機</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/shop/shop-products" class="nav-link"
-                >觸控筆</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/users/account-orders" class="nav-link"
-                >訂單</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link to="/users/account-settings" class="nav-link"
-                >資訊</router-link
-              >
+            <li v-for="item in menuData" :key="item.id" class="nav-item">
+                <router-link :to="`/shop/shop-products/${item.id}`" class="nav-link"
+                >{{ item.name }}</router-link
+                >
             </li>
           </ul>
         </div>

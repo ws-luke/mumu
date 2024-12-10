@@ -68,6 +68,16 @@ const router = createRouter({
       component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
     },
     {
+      path: '/shop/shop-products/:category', // 商品主類別列表
+      name: 'shop-products-category',
+      component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
+    },
+    {
+      path: '/shop/shop-products/:category/:subCategory', // 商品子類別列表
+      name: 'shop-products-category-subCategory',
+      component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
+    },
+    {
       path: '/shop/shop-product', // 商品介紹頁
       name: 'shop-product',
       component: () => import('@/views/frontend/shop/ShopProductView.vue'),
