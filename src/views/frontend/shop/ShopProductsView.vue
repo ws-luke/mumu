@@ -3,17 +3,26 @@
   import axios from 'axios';
 
   const menuData = ref([]);
-  const api = `${import.meta.env.VITE_API_URL}categories/all`;
-
+  const api = import.meta.env.VITE_API_URL;
+  const productData = ref([]);
   onMounted (async () => {
       try {
-          const { data: categories } = await axios.get(api);
+          const { data: categories } = await axios.get(`${api}/categories/all`);
           menuData.value = Object.values(categories.data);
-          console.log(menuData.value);
+
+          const { data: products } = await axios.get(`${api}/products/all`);
+          productData.value = Object.values(products.data);
+          
+
       } catch (error) {
           console.error('API 請求失敗:', error);
       }
   })
+
+
+  // /products/all
+
+
 </script>
 
 <template>
@@ -29,7 +38,7 @@
       </nav>
       <div class="row">
         <aside class="mb-6 mb-md-0 col-lg-3 col-md-4 d-none d-lg-block">
-          <div  class="accordion" id="accordionProductsPage">
+          <div class="accordion" id="accordionProductsPage">
             <div v-for="item in menuData" :key="item.id" class="accordion-item border-0">
               <h2 class="accordion-header border-bottom" :id="`productList${item.id}`">
                 <button

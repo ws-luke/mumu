@@ -1,7 +1,99 @@
-<script setup></script>
+<script setup>
+import ToastNotification from '@/components/ToastNotification.vue';
+import { ref , onMounted } from 'vue';
+import axios from 'axios';
+const api = import.meta.env.VITE_API_URL;
+
+// 定義變數 productVariants，初始值為空陣列
+const productVariants = ref([]);
+const categoryData = ref([]);
+const subcategories = ref([]); // 存放子類別資料
+const toast = ref(null);//彈窗訊息
+
+// 最主要資料處存區
+const product = ref({
+  title: '', // 產品名稱
+  weight: '', // 重量
+  material: '', // 材質
+  warranty: '', // 保固
+  origin_price: '', // 原價
+  price: '', // 售價
+  unit: '', // 單位
+  is_enabled: '', // 是否上架
+  is_stock: '', // 庫存
+  category: '', // 分類
+  subcategory: '', // 子分類
+  productVariants
+})
+
+// 產品類別
+const fetchCategories = async () => {
+  try {
+    const { data: categories } = await axios.get(`${api}/categories/all`);
+    categoryData.value = Object.values(categories.data);
+  } catch (error) {
+    console.error('取得產品類別失敗:', error);
+  }
+};
+
+// 取得對應的子類別
+const fetchSubcategories = async () => {
+  if (!product.value.category) {
+    subcategories.value = []; // 如果沒選類別，清空子類別
+    return;
+  }
+  // 根據選擇的類別名稱找到對應的類別物件
+  const selectedCategory = categoryData.value.find((item) => item.name === product.value.category);
+  if (selectedCategory && selectedCategory.subcategories) {
+    // 更新子類別資料
+    subcategories.value = Object.values(selectedCategory.subcategories);
+  } else {
+    subcategories.value = [];
+  }
+};
+
+// 新增一行變體資料
+const addRow = () => {
+  productVariants.value.push({ model: '', color: '', quantity: null });
+};
+// 刪除指定索引的變體
+const removeRow = (index) => {
+  productVariants.value.splice(index, 1);
+};
+// 新增產品
+const createProduct = async () => {
+  try {
+    const response = await axios.post(`${api}/products/product`, product.value);
+    
+    // 從後端的回應中提取訊息
+    const successMessage = response.data.message || '產品新增成功！';
+    
+    // 使用 toast.success 顯示訊息
+    toast.value.showSuccessToast(successMessage);  
+
+    product.value = {};
+  } catch (error) {
+    console.error('新增產品失敗:', error);
+    toast.value.showErrorToast('產品新增失敗！'); 
+  }
+}
+
+onMounted ( async () => {
+  try {
+   await fetchCategories();
+  } catch (error) {
+      console.error('API 請求失敗:', error);
+  }
+})
+
+
+
+
+</script>
 
 <template>
   <div class="container-fluid">
+    <ToastNotification ref="toast"></ToastNotification>
     <div class="row mb-4">
       <div class="col d-flex justify-content-between align-items-center">
         <div>
@@ -32,24 +124,29 @@
             <h4 class="h5 mb-4">產品資訊</h4>
             <div class="row">
               <div class="mb-3 col-lg-6">
-                <label class="form-label">產品名稱</label
+                <label class="form-label" for="productName">產品名稱</label
                 ><input
-                  placeholder="產品名稱"
                   class="form-control"
+                  id="productName"
+                  v-model="product.title"
                   type="text"
                 />
               </div>
               <div class="mb-3 col-lg-6">
-                <label class="form-label">重量</label
-                ><input placeholder="重量" class="form-control" type="number" />
+                <label class="form-label" for="productWeight">重量</label
+                ><input class="form-control" type="number" id="productWeight" v-model="product.weight" />
               </div>
               <div class="mb-3 col-lg-6">
-                <label class="form-label">材質</label
-                ><input placeholder="材質" class="form-control" type="text" />
+                <label class="form-label" for="productMaterial">材質</label
+                ><input class="form-control" type="text" id="productMaterial" v-model="product.material" />
               </div>
               <div class="mb-3 col-lg-6">
-                <label class="form-label">保固</label
-                ><input placeholder="保固" class="form-control" type="text" />
+                <label class="form-label" for="productWarranty">保固</label
+                ><input class="form-control" type="text" id="productWarranty" v-model="product.warranty"  />
+              </div>
+              <div class="mb-3 col-lg-6">
+                <label class="form-label" for="productUnit">單位</label
+                ><input class="form-control" type="text" id="productUnit" v-model="product.unit"  />
               </div>
               <div class="mb-3 mt-4 col-lg-12">
                 <h4 class="mb-4 h5">產品圖片</h4>
@@ -67,42 +164,43 @@
         </div>
         <div class="card mb-4">
           <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-              <h4 class="mb-0 h5">顏色</h4>
-              <button type="button" class="btn btn-primary">新增</button>
+            <div class="col-12 d-flex align-items-center justify-content-between">
+                <h4 class="mb-0 h5">顏色及數量</h4>
+                <button @click="addRow" type="button" class="btn btn-primary">新增</button>
             </div>
-            <div class="row mb-3">
-              <div class="col-5">
-                <input placeholder="顏色" class="form-control" type="text" />
+            <div class="row mt-3" v-for="(variant, index) in productVariants" :key="index">
+              <div class="col-3">
+                <label class="form-label" :for="'form-model-' + index">型號</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  :id="'form-model-' + index"
+                  v-model="variant.model"
+                  required
+                />
               </div>
-              <div class="col-5">
-                <input placeholder="數量" class="form-control" type="number" />
+              <div class="col-3">
+                <label class="form-label" :for="'form-color-' + index">顏色</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  :id="'form-color-' + index"
+                  v-model="variant.color"
+                  required
+                />
               </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-outline-danger w-100">
-                  刪除
-                </button>
+              <div class="col-3">
+                <label class="form-label" :for="'form-quantity-' + index">數量</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  :id="'form-quantity-' + index"
+                  v-model="variant.quantity"
+                  required
+                />
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-              <h4 class="mb-0 h5">規格</h4>
-              <button type="button" class="btn btn-primary">新增</button>
-            </div>
-            <div class="row mb-3">
-              <div class="col-5">
-                <input placeholder="規格" class="form-control" type="text" />
-              </div>
-              <div class="col-5">
-                <input placeholder="數量" class="form-control" type="number" />
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-outline-danger w-100">
-                  刪除
-                </button>
+              <div class="col-3 d-flex align-items-end">
+                <button @click="removeRow(index)" type="button" class="btn btn-outline-danger w-100"> 刪除 </button>
               </div>
             </div>
           </div>
@@ -113,27 +211,17 @@
           <div class="card-body">
             <h4 class="mb-4 h5">產品類別</h4>
             <div class="mb-3 col">
-              <label class="form-label">產品類別</label
-              ><select class="form-select">
-                <option>產品類別</option>
-                <option value="線材類">線材類</option>
-                <option value="掛繩類">掛繩類</option>
-                <option value="手機殼">手機殼</option>
-                <option value="充電頭">充電頭</option>
-                <option value="螢幕保護貼">螢幕保護貼</option>
-                <option value="行動電源">行動電源</option>
-                <option value="藍芽耳機">藍芽耳機</option>
-                <option value="觸控筆">觸控筆</option>
+              <label class="form-label" for="productCategory">產品類別</label>
+              <select class="form-select" id="productCategory" v-model="product.category" @change="fetchSubcategories">
+                <option value="" disabled>請選擇產品類別</option>
+                <option v-for="item in categoryData" :key="item.id" :value="item.name">{{ item.name }}</option>
               </select>
             </div>
             <div class="mb-3 col">
-              <label class="form-label">子類別</label
-              ><select class="form-select">
-                <option>子類別</option>
-                <option value="USB A – Type C">USB A – Type C</option>
-                <option value="USB C – Type C">USB C – Type C</option>
-                <option value="USB A – Lightning">USB A – Lightning</option>
-                <option value="USB C - Lightning">USB C - Lightning</option>
+              <label class="form-label" for="productSubcategory">子類別</label>
+              <select class="form-select" id="productSubcategory" v-model="product.subcategory" :disabled="subcategories.length === 0">
+                <option value="" disabled>請選擇子類別</option>
+                <option v-for="item in subcategories" :key="item.id" :value="item.name">{{ item.name }}</option>
               </select>
             </div>
           </div>
@@ -145,50 +233,37 @@
                 id="flexSwitchStock"
                 class="form-check-input"
                 type="checkbox"
-                checked=""
+                v-model="product.is_stock"
+                :checked="product.is_stock"
               /><label for="flexSwitchStock" class="form-check-label"
                 >有庫存</label
               >
             </div>
-            <div>
-              <div class="mb-3">
-                <label class="form-label">產品編號</label
-                ><input
-                  placeholder="輸入產品編號"
-                  class="form-control"
-                  type="text"
-                />
+            <div class="mb-3">
+              <label class="form-label">狀態</label><br />
+              <div class="form-check form-check-inline">
+                <input
+                  id="inlineRadio1"
+                  class="form-check-input"
+                  type="radio"
+                  v-model="product.is_enabled"
+                  :value="1"
+                  name="inlineRadioOptions"
+                /><label title="" for="inlineRadio1" class="form-check-label"
+                  >上架</label
+                >
               </div>
-              <div class="mb-3">
-                <label class="form-label">產品庫存數量</label
-                ><input
-                  placeholder="輸入產品庫存數量"
-                  class="form-control"
-                  type="number"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">狀態</label><br />
-                <div class="form-check form-check-inline">
-                  <input
-                    id="inlineRadio1"
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                  /><label title="" for="inlineRadio1" class="form-check-label"
-                    >上架</label
-                  >
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    id="inlineRadio2"
-                    class="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                  /><label title="" for="inlineRadio2" class="form-check-label"
-                    >下架</label
-                  >
-                </div>
+              <div class="form-check form-check-inline">
+                <input
+                  id="inlineRadio2"
+                  class="form-check-input"
+                  type="radio"
+                  v-model="product.is_enabled"
+                  :value="0"
+                  name="inlineRadioOptions"
+                /><label title="" for="inlineRadio2" class="form-check-label"
+                  >下架</label
+                >
               </div>
             </div>
           </div>
@@ -197,16 +272,16 @@
           <div class="card-body">
             <h4 class="mb-4 h5">產品價格</h4>
             <div class="mb-3">
-              <label class="form-label">原價</label
-              ><input placeholder="" class="form-control" type="number" />
+              <label class="form-label" for="productOrigin_price">原價</label>
+              <input class="form-control" id="productOrigin_price" type="number" v-model="product.origin_price" />
             </div>
             <div class="mb-3">
-              <label class="form-label">特價</label
-              ><input placeholder="" class="form-control" type="number" />
+              <label class="form-label" for="productPrice">售價</label>
+              <input class="form-control" id="productPrice" type="number" v-model="product.price" />
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-success w-100">儲存</button>
+        <button type="button" class="btn btn-success w-100" @click="createProduct">儲存</button>
       </div>
     </div>
   </div>

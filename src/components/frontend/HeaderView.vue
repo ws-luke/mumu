@@ -3,12 +3,12 @@
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
 
+  const api = import.meta.env.VITE_API_URL
   const menuData = ref([]);
-  const api = `${import.meta.env.VITE_API_URL}categories/all`;
 
   onMounted (async () => {
       try {
-          const { data: categories } = await axios.get(api);
+          const { data: categories } = await axios.get(`${api}/categories/all`);
           menuData.value = Object.values(categories.data);
       } catch (error) {
           console.error('API 請求失敗:', error);
