@@ -1,5 +1,56 @@
+<script setup>
+import ToastNotification from '@/components/ToastNotification.vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+const api = import.meta.env.VITE_API_URL;
+const toast = ref(null); // 彈窗訊息
+const router = useRouter();
+const productsData = ref([]);
+
+// 取得商品列表
+const getProducts = async () => {
+  try {
+    const { data: products } = await axios.get(`${api}/products/all`);
+    productsData.value = Object.values(products.data);
+  } catch (error) {
+    console.error('API 請求失敗:', error);
+  }
+}
+
+// 編輯商品
+const editProduct = (id) => {
+  router.push(`/admin/product/${id}`);
+}
+// 刪除商品
+const deleteProduct = async (id) => {
+  try {
+    const response = await axios.delete(`${api}/products/product/${id}`);
+    await getProducts();
+
+    // 從後端的回應中提取訊息
+    const successMessage = response.data.message || '產品新增成功！';
+
+    // 使用 toast.success 顯示訊息
+    toast.value.showSuccessToast(successMessage);
+  } catch (error) {
+    console.error('API 請求失敗:', error);
+  }
+}
+
+
+onMounted(async () => {
+  try {
+    await getProducts();
+  } catch (error) {
+    console.error(error.message);
+  }
+})
+</script>
+
 <template>
   <div class="container-fluid">
+    <ToastNotification ref="toast"></ToastNotification>
     <div class="row mb-4">
       <div class="col">
         <div class="d-flex align-items-center justify-content-between">
@@ -14,7 +65,7 @@
               </ol>
             </nav>
           </div>
-          <router-link to="/admin/add-product" class="btn btn-primary">
+          <router-link to="/admin/product" class="btn btn-primary">
             新增產品
           </router-link>
         </div>
@@ -60,7 +111,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr v-for="product in productsData" :key="product.id">
                   <td colspan="1">
                     <input class="form-check-input" type="checkbox" />
                   </td>
@@ -71,11 +122,11 @@
                       alt=""
                     />
                   </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
+                  <td>{{ product.title }}</td>
+                  <td>{{ product.category }}</td>
+                  <td><span class="badge bg-success">{{ product.is_enabled ? '已上架' : '未上架' }}</span></td>
+                  <td>{{ product.price }}</td>
+                  <td>{{ product.createdAt }}</td>
                   <td>
                     <div class="dropdown">
                       <buttom
@@ -105,31 +156,9 @@
                       >
                         <ul class="p-2 list-unstyled mb-0">
                           <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
                             <button
+                              type="button"
+                              @click="editProduct(product.id)"
                               class="dropdown-item px-1 d-flex align-items-center btn"
                             >
                               <svg
@@ -137,80 +166,6 @@
                                 width="16"
                                 height="16"
                                 fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
                                 class="bi bi-trash me-2"
                                 viewBox="0 0 16 16"
                               >
@@ -222,778 +177,12 @@
                                 />
                               </svg>
                               編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
                             </button>
                           </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
                           <li>
                             <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
-                              class="dropdown-item px-1 d-flex align-items-center btn"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                              </svg>
-                              刪除
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="1">
-                    <input class="form-check-input" type="checkbox" />
-                  </td>
-                  <td>
-                    <img
-                      class="productImg"
-                      src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-                      alt=""
-                    />
-                  </td>
-                  <td>C-C 60W 雙色編織充電線(粉灰)</td>
-                  <td>線材類</td>
-                  <td><span class="badge bg-success">已上架</span></td>
-                  <td>356</td>
-                  <td>2024-11-08 14:38:55</td>
-                  <td>
-                    <div class="dropdown">
-                      <buttom
-                        class="text-reset btn p-0 border-0"
-                        id=""
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="fs-5"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
-                      <div
-                        class="dropdown-menu dropdown-menu-end py-0"
-                        aria-labelledby=""
-                      >
-                        <ul class="p-2 list-unstyled mb-0">
-                          <li>
-                            <router-link
-                              to="/admin/add-product"
-                              class="dropdown-item px-1 d-flex align-items-center"
-                              href="#"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-trash me-2"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                />
-                                <path
-                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                />
-                              </svg>
-                              編輯
-                            </router-link>
-                          </li>
-                          <li>
-                            <button
+                              type="button"
+                              @click="deleteProduct(product.id)"
                               class="dropdown-item px-1 d-flex align-items-center btn"
                             >
                               <svg

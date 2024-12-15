@@ -2,13 +2,21 @@
 import ToastNotification from '@/components/ToastNotification.vue';
 import { ref , onMounted } from 'vue';
 import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
 const api = import.meta.env.VITE_API_URL;
 
-// 定義變數 productVariants，初始值為空陣列
-const productVariants = ref([]);
-const categoryData = ref([]);
+const router = useRouter();
+// 從路由中取得參數
+const route = useRoute();
+const id = route.params.id || null;
+
+// 判斷是否為編輯模式
+const isEditMode = ref(!!id);
+
+const productVariants = ref([]); // 定義變數 productVariants，初始值為空陣列
+const categoryData = ref([]); // 存放類別資料
 const subcategories = ref([]); // 存放子類別資料
-const toast = ref(null);//彈窗訊息
+const toast = ref(null); // 彈窗訊息
 
 // 最主要資料處存區
 const product = ref({
@@ -29,8 +37,8 @@ const product = ref({
 // 產品類別
 const fetchCategories = async () => {
   try {
-    const { data: categories } = await axios.get(`${api}/categories/all`);
-    categoryData.value = Object.values(categories.data);
+    const { data } = await axios.get(`${api}/categories/all`);
+    categoryData.value = Object.values(data.data);
   } catch (error) {
     console.error('取得產品類別失敗:', error);
   }
@@ -44,19 +52,19 @@ const fetchSubcategories = async () => {
   }
   // 根據選擇的類別名稱找到對應的類別物件
   const selectedCategory = categoryData.value.find((item) => item.name === product.value.category);
-  if (selectedCategory && selectedCategory.subcategories) {
+  if (selectedCategory?.subcategories) {
     // 更新子類別資料
-    subcategories.value = Object.values(selectedCategory.subcategories);
+    subcategories.value = selectedCategory.subcategories;
   } else {
     subcategories.value = [];
   }
 };
 
-// 新增一行變體資料
+// 新增顏色及數量及型號
 const addRow = () => {
   productVariants.value.push({ model: '', color: '', quantity: null });
 };
-// 刪除指定索引的變體
+// 刪除指定顏色及數量及型號
 const removeRow = (index) => {
   productVariants.value.splice(index, 1);
 };
@@ -64,30 +72,61 @@ const removeRow = (index) => {
 const createProduct = async () => {
   try {
     const response = await axios.post(`${api}/products/product`, product.value);
-    
+
     // 從後端的回應中提取訊息
     const successMessage = response.data.message || '產品新增成功！';
-    
+
     // 使用 toast.success 顯示訊息
-    toast.value.showSuccessToast(successMessage);  
+    toast.value.showSuccessToast(successMessage);
 
     product.value = {};
+    productVariants.value = [];
   } catch (error) {
-    console.error('新增產品失敗:', error);
-    toast.value.showErrorToast('產品新增失敗！'); 
+    const successMessage = error.message || '新增產品失敗';
+    toast.value.showErrorToast(successMessage);
+  }
+}
+
+// 編輯產品
+const editProduct = async (id) => {
+  try {
+    const response = await axios.put(`${api}/products/product/${id}`, product.value);
+
+    // 從後端的回應中提取訊息
+    const successMessage = response.data.message || '產品編輯成功！';
+
+    // 使用 toast.success 顯示訊息
+    toast.value.showSuccessToast(successMessage);
+
+    product.value = {};
+    productVariants.value = [];
+
+    router.push('/admin/products');
+
+  } catch (error) {
+    const successMessage = error.message || '編輯產品失敗';
+    toast.value.showErrorToast(successMessage);
   }
 }
 
 onMounted ( async () => {
-  try {
-   await fetchCategories();
-  } catch (error) {
-      console.error('API 請求失敗:', error);
+  await fetchCategories();
+  if (isEditMode.value) {
+    try {
+      const { data } = await axios.get(`${api}/products/${id}`);
+      product.value = data.data;
+      productVariants.value = data.data.productVariants;
+      console.log(data.data);
+
+      // 如果有選擇的類別，更新子類別
+      if (product.value.category) {
+        fetchSubcategories();
+      }
+    } catch (error) {
+      console.error('無法載入產品資料', error);
+    }
   }
 })
-
-
-
 
 </script>
 
@@ -97,7 +136,7 @@ onMounted ( async () => {
     <div class="row mb-4">
       <div class="col d-flex justify-content-between align-items-center">
         <div>
-          <h2>新增產品</h2>
+          <h2>{{ isEditMode ? '編輯產品' : '新增產品' }}</h2>
           <nav>
             <ol class="breadcrumb mb-0">
               <li class="breadcrumb-item">
@@ -281,7 +320,8 @@ onMounted ( async () => {
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-success w-100" @click="createProduct">儲存</button>
+        <button v-if="isEditMode" type="button" class="btn btn-success w-100" @click="editProduct(id)">編輯產品</button>
+        <button v-else type="button" class="btn btn-success w-100" @click="createProduct">新增產品</button>
       </div>
     </div>
   </div>

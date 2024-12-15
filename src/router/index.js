@@ -115,9 +115,10 @@ const router = createRouter({
           component: () => import('@/views/admin/products/ProductsView.vue'),
         },
         {
-          path: '/admin/add-product', // 新增產品
-          name: 'add-product',
-          component: () => import('@/views/admin/products/AddProductView.vue'),
+          path: '/admin/product/:id?', // 新增產品 + 編輯產品
+          name: 'product-form',
+          component: () => import('@/views/admin/products/ProductView.vue'),
+          props: true, // 自動將路由參數傳給組件
         },
         {
           path: '/admin/orders', // 訂單列表
