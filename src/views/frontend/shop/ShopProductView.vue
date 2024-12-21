@@ -1,37 +1,46 @@
-<script>
-import { ref } from 'vue'
-// Import Swiper Vue.js components
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/vue'
-
-// Import Swiper styles
 import 'swiper/css'
-
 import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
-
-// import required modules
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
-export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
-  setup() {
-    const thumbsSwiper = ref(null)
+// 定義 refs
+const thumbsSwiper = ref(null)
+const api = import.meta.env.VITE_API_URL; // API URL
+const { id } = useRoute().params;
+const product = ref({}); // 商品資訊
+const productVariants = ref();
+// 定義 modules
+const modules = [FreeMode, Navigation, Thumbs]
 
-    const setThumbsSwiper = swiper => {
-      thumbsSwiper.value = swiper
-    }
-
-    return {
-      thumbsSwiper,
-      setThumbsSwiper,
-      modules: [FreeMode, Navigation, Thumbs],
-    }
-  },
+// 取得商品
+const getProduct = async () => {
+  try {
+    const { data } = await axios.get(`${api}/products/${id}`);
+    product.value = data.data;
+    productVariants.value = data.data.productVariants;
+  } catch (error) {
+    console.error('取得商品失敗', error);
+  }
 }
+// 設定輪播圖片
+const setThumbsSwiper = swiper => {
+  thumbsSwiper.value = swiper
+}
+
+onMounted(async () => {
+  try {
+    await getProduct();
+  } catch (error) {
+    console.error('取得商品失敗', error);
+  }
+})
 </script>
+
 
 <template>
   <div>
@@ -50,7 +59,7 @@ export default {
               >
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              C-C 60W 雙色編織充電線
+              {{product.title}}
             </li>
           </ol>
         </nav>
@@ -66,38 +75,11 @@ export default {
               :navigation="true"
               :thumbs="{ swiper: thumbsSwiper }"
               :modules="modules"
-              class="mySwiper2"
+              class="mySwiper2 mb-3"
             >
-              <swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-2.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-3.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-4.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-5.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-6.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-7.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-8.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-9.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img src="https://swiperjs.com/demos/images/nature-10.jpg"
-              /></swiper-slide>
+              <swiper-slide v-for="url in product.imagesUrl" :key="url">
+                <img :src="url" />
+              </swiper-slide>
             </swiper>
             <swiper
               @swiper="setThumbsSwiper"
@@ -109,91 +91,42 @@ export default {
               :modules="modules"
               class="mySwiper"
             >
-              <swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-2.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-3.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-4.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-5.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-6.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-7.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-8.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img
-                  src="https://swiperjs.com/demos/images/nature-9.jpg" /></swiper-slide
-              ><swiper-slide
-                ><img src="https://swiperjs.com/demos/images/nature-10.jpg"
-              /></swiper-slide>
+              <swiper-slide v-for="url in product.imagesUrl" :key="url">
+                <img :src="url" />
+              </swiper-slide>
             </swiper>
           </div>
           <div class="col-md-6">
             <router-link
               to="/shop/shop-products"
               class="mb-2 d-block text-decoration-none"
-              >線材類</router-link
+              >{{product.category}}</router-link
             >
-            <h1>C-C 60W 雙色編織充電線(粉灰)</h1>
+            <h1>{{product.title}}</h1>
             <div class="fs-4">
-              <span class="fw-bold text-dark">$144 </span>
-              <span class="text-decoration-line-through text-muted">$24</span>
-              <span><small class="fs-6 ms-2 text-danger">40% Off</small></span>
+              <span class="fw-bold text-dark">{{ product.price }}</span>
+              <span class="text-decoration-line-through text-muted">{{ product.origin_price }}</span>
             </div>
             <hr class="my-4" />
-            <h5 class="">購買數量不同價格</h5>
+            <!-- <h5 class="">購買數量不同價格</h5>
             <ul>
               <li>1 - 49 : $160</li>
               <li>50 - 299 : $150</li>
               <li>300 - 499 : $145</li>
               <li>500 : $130</li>
-            </ul>
+            </ul> -->
             <div class="my-4 d-flex gap-1">
-              <input
-                type="radio"
-                class="btn-check"
-                name="options-outlined"
-                id="success-outlined"
-                autocomplete="off"
-                checked
-              />
-              <label
-                class="btn btn-outline-secondary btn-lg me-2"
-                for="success-outlined"
-                >1m</label
-              >
-              <input
-                type="radio"
-                class="btn-check"
-                name="options-outlined"
-                id="danger-outlined"
-                autocomplete="off"
-              />
-              <label
-                class="btn btn-outline-secondary btn-lg me-2"
-                for="danger-outlined"
-                >1.2m</label
-              >
+              <div class="">
+                <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked/>
+                <label class="btn btn-outline-secondary btn-lg me-2" for="success-outlined">1m</label>
+              </div>
+
+              <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off"/>
+              <label class="btn btn-outline-secondary btn-lg me-2" for="danger-outlined">1.2m</label>
+
+
             </div>
-            <input
-              class="form-control form-control-lg"
-              type="number"
-              value="1"
-              name="quantity"
-            />
+            <input class="form-control form-control-lg" type="number" value="1" name="quantity"/>
             <div class="mt-3 g-2 align-items-center row">
               <div class="d-grid col-xxl-4 col-lg-6 col-md-8 col-6">
                 <button type="button" class="btn btn-primary">
@@ -242,24 +175,16 @@ export default {
               <table class="table table-borderless mb-0">
                 <tbody>
                   <tr>
-                    <td>傳輸速度:</td>
-                    <td>480Mbps</td>
-                  </tr>
-                  <tr>
                     <td>材質:</td>
-                    <td>尼龍編織</td>
+                    <td>{{ product.material }}</td>
                   </tr>
                   <tr>
                     <td>重量:</td>
-                    <td>30g</td>
+                    <td>{{ product.weight }}g</td>
                   </tr>
                   <tr>
                     <td>保固:</td>
-                    <td>6個月</td>
-                  </tr>
-                  <tr>
-                    <td>外包裝尺寸:</td>
-                    <td>11cm x 15cm x 2.5cm</td>
+                    <td>{{ product.warranty }}</td>
                   </tr>
                 </tbody>
               </table>

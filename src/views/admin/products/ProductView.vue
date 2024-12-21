@@ -31,6 +31,8 @@ const product = ref({
   is_stock: '', // 庫存
   category: '', // 分類
   subcategory: '', // 子分類
+  imageUrl: '',
+  imagesUrl: [''],
   productVariants
 })
 
@@ -59,7 +61,14 @@ const fetchSubcategories = async () => {
     subcategories.value = [];
   }
 };
-
+// 新增圖片數量
+const addImagesItem = () => {
+  product.value.imagesUrl.push('');
+};
+// 刪除圖片數量
+const removeImagesItem = (index) => {
+  product.value.imagesUrl.splice(index, 1);
+};
 // 新增顏色及數量及型號
 const addRow = () => {
   productVariants.value.push({ model: '', color: '', quantity: null });
@@ -81,6 +90,8 @@ const createProduct = async () => {
 
     product.value = {};
     productVariants.value = [];
+
+    router.push('/admin/products');
   } catch (error) {
     const successMessage = error.message || '新增產品失敗';
     toast.value.showErrorToast(successMessage);
@@ -116,8 +127,6 @@ onMounted ( async () => {
       const { data } = await axios.get(`${api}/products/${id}`);
       product.value = data.data;
       productVariants.value = data.data.productVariants;
-      console.log(data.data);
-
       // 如果有選擇的類別，更新子類別
       if (product.value.category) {
         fetchSubcategories();
@@ -187,17 +196,6 @@ onMounted ( async () => {
                 <label class="form-label" for="productUnit">單位</label
                 ><input class="form-control" type="text" id="productUnit" v-model="product.unit"  />
               </div>
-              <div class="mb-3 mt-4 col-lg-12">
-                <h4 class="mb-4 h5">產品圖片</h4>
-                <img class="productImg img-fluid mb-3" src="" alt="" />
-                <input
-                  class="form-control"
-                  type="file"
-                  id="fileUploader"
-                  accept="image/*"
-                  multiple
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -240,6 +238,32 @@ onMounted ( async () => {
               </div>
               <div class="col-3 d-flex align-items-end">
                 <button @click="removeRow(index)" type="button" class="btn btn-outline-danger w-100"> 刪除 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="h5 mb-4">產品圖片</h4>
+            <div class="row">
+              <div class="col-lg-3">
+                <label class="form-label">產品主圖片</label>
+                <input type="text" class="form-control" v-model="product.imageUrl">
+                <img class="productImg img-fluid mb-3" :src="product.imageUrl" alt="" width="250"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="d-flex align-items-center mb-3 justify-content-between">
+                <p class="mb-0 fs-5">產品其他圖片</p>
+                <button class="btn btn-primary" @click="addImagesItem">新增</button>
+              </div>
+              <div v-for="(url, index) in product.imagesUrl" :key="index" class="col-lg-4">
+                <label class="form-label" :for="'form-image-' + index">圖片{{ index + 1}}</label>
+                <div class="d-flex justify-content-between">
+                  <input type="text" class="form-control w-75" v-model="product.imagesUrl[index]" :id="'form-image-' + index">
+                  <button class="btn btn-outline-danger" @click="removeImagesItem(index)">刪除</button>
+                </div>
+                <img class="productImg img-fluid my-3 w-100" :src="product.imagesUrl[index]" alt=""/>
               </div>
             </div>
           </div>

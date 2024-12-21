@@ -68,17 +68,7 @@ const router = createRouter({
       component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
     },
     {
-      path: '/shop/shop-products/:category', // 商品主類別列表
-      name: 'shop-products-category',
-      component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
-    },
-    {
-      path: '/shop/shop-products/:category/:subCategory', // 商品子類別列表
-      name: 'shop-products-category-subCategory',
-      component: () => import('@/views/frontend/shop/ShopProductsView.vue'),
-    },
-    {
-      path: '/shop/shop-product', // 商品介紹頁
+      path: '/shop/shop-product/:id', // 商品介紹頁
       name: 'shop-product',
       component: () => import('@/views/frontend/shop/ShopProductView.vue'),
     },
@@ -119,6 +109,11 @@ const router = createRouter({
           name: 'product-form',
           component: () => import('@/views/admin/products/ProductView.vue'),
           props: true, // 自動將路由參數傳給組件
+        },
+        {
+          path: '/admin/upload', // 上傳檔案
+          name: 'upload',
+          component: () => import('@/views/admin/uploadView.vue'),
         },
         {
           path: '/admin/orders', // 訂單列表

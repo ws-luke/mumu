@@ -1,6 +1,6 @@
 <script setup>
   import LogoComponent from '@/components/LogoComponent.vue';
-  
+
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   import * as bootstrap from 'bootstrap';
@@ -64,10 +64,19 @@
           >
             <div class="accordion-body p-0">
               <ul class="navbar-nav px-3">
-                <li v-for="subcategory in Object.values(item.subcategories)" 
-                    :key="subcategory.id" 
+                <li v-for="subcategory in Object.values(item.subcategories)"
+                    :key="subcategory.id"
                     class="nav-item">
-                  <router-link :to="`/shop/shop-products/${item.id}/${subcategory.id}`" @click="closeOffcanvas" class="nav-link">
+                  <router-link
+                    :to="{
+                      name: 'shop-products',
+                      query: {
+                        category: item.name,
+                        subcategory: subcategory.name
+                      }
+                    }"
+                    @click="closeOffcanvas"
+                    class="nav-link">
                     {{ subcategory.name }}
                   </router-link>
                 </li>

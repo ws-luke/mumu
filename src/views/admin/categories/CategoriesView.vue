@@ -10,7 +10,7 @@ const toast = ref(null); // 彈窗訊息
 const categoriesData = ref([]); // 主類別內容
 const selectedCategory = ref({ name: '',is_enabled: '', subcategories: '' }); // 選擇的主類別
 const categoryModalRef = ref(null); // 主類別彈窗元素
-const categoryId = ref(null);
+const categoryId = ref(null); // 主類別ID
 const subCategoriesData = ref([]); // 子類別內容
 const selectedSubCategory = ref({ name: '',is_enabled: '' }); // 選擇的子類別
 const subCategoryModalRef = ref(null); // 子類別彈窗元素
@@ -60,7 +60,6 @@ const saveCategory = async () => {
 // 刪除主類別
 const deleteCategory = async (id) => {
   try {
-    // 顯示確認視窗
     const result = await Swal.fire({
       title: "刪除主類",
       text: "確定要刪除主類別嗎",
@@ -115,15 +114,23 @@ const closeSubCategoryModal = () => {
   }
 }
 // 取得子類別資料
-const getSubCategoryData = async (id) => {
-  const { data } = await axios.get(`${api}/categories/${id}/subcategories`);
-  subCategoriesData.value = Object.values(data.data);
+const getSubCategoryData = async (categoryId) => {
+  try {
+    const { data } = await axios.get(`${api}/categories/${categoryId}/subcategories`);
+    subCategoriesData.value = Object.values(data.data);
+  } catch (error) {
+    console.error('取得子類別資料失敗:', error);
+  }
 }
 
 // 開啟子類別
-const openSubcategory = (category,id) => {
-  subCategoriesData.value = Object.values(category.subcategories);
-  categoryId.value = id;
+const openSubcategory = (category) => {
+  try {
+    subCategoriesData.value = Object.values(category.subcategories);
+    categoryId.value = category.id;
+  } catch (error) {
+    console.error('開啟子類別失敗:', error);
+  }
 }
 
 // 儲存子類別
@@ -141,6 +148,7 @@ const saveSubCategory = async () => {
       const successMessage = response.data.message || '子類別已成功儲存';
       toast.value.showSuccessToast(successMessage);
     }
+    selectedSubCategory.value = {};
     await getCategoryData(); // 重新載入資料
     await getSubCategoryData(id);
     closeSubCategoryModal();
@@ -150,16 +158,43 @@ const saveSubCategory = async () => {
 }
 
 // 刪除子類別
-const deleteSubCategory = async (id) => {
+const deleteSubCategory = async (subcategoryId) => {
   try {
-    console.log(id);
-    const response = await axios.delete(`${api}/categories/${categoryId.value}/subcategories/`);
-    const successMessage = response.data.message || '子類別已成功刪除';
-    toast.value.showSuccessToast(successMessage);
+    // 顯示確認視窗
+    const result = await Swal.fire({
+      title: "刪除主類",
+      text: "確定要刪除子類別嗎",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "確定",
+      cancelButtonText: "取消"
+    });
+
+    // 如果使用者確認刪除
+    if (result.isConfirmed) {
+      // 發送刪除請求
+      const response = await axios.delete(`${api}/categories/${categoryId.value}/subcategories/${subcategoryId}`);
+      const successMessage = response.data.message || '子類別已成功刪除';
+      toast.value.showSuccessToast(successMessage);
+
+      await Swal.fire({
+        title: "成功!",
+        text: "刪除子類別成功",
+        icon: "success"
+      });
+
+      // 重新載入資料
+      await getSubCategoryData(categoryId.value);
+      // 如果子類別為空，提示使用者
+      if (subCategoriesData.value.length === 0) {
+        toast.value.showInfoToast('目前沒有子類別資料');
+      }
+    }
   } catch (error) {
     console.error('刪除子類別失敗:', error);
   }
-
 }
 
 onMounted(async () => {
@@ -173,13 +208,6 @@ onMounted(async () => {
 
 <template>
   <div class="container-fluid">
-  <p>類別</p>{{ categoriesData }}
-  <hr>
-  <p>選擇的主類別</p>{{ selectedCategory }}
-    <hr>
-    <p>子類別</p>{{ subCategoriesData }}
-<hr>
-<p>選擇的子類別</p>{{ selectedSubCategory }}
     <ToastNotification ref="toast"></ToastNotification>
     <div class="row mb-4">
       <div class="col">
@@ -191,7 +219,7 @@ onMounted(async () => {
                 <li class="breadcrumb-item">
                   <router-link to="/admin/dashboard">首頁</router-link>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">類別</li>
+                <li class="breadcrumb-item active">類別</li>
               </ol>
             </nav>
           </div>
@@ -230,11 +258,11 @@ onMounted(async () => {
                     <input class="form-check-input" type="checkbox" />
                   </td>
                   <td>{{ category.name }}</td>
-                  <td><span class="badge bg-success">{{ category.is_enabled ? '已上架' : '未上架' }}</span></td>
+                  <td><span class="badge" :class="[ category.is_enabled ? 'bg-success' : 'bg-secondary']">{{ category.is_enabled ? '已上架' : '未上架' }}</span></td>
                   <td colspan="1" class="text-end">
                     <button @click="openEditCategoryModal(category)" class="btn text-primary">編輯</button>
                     <button @click="deleteCategory(category.id)" class="btn text-danger">刪除</button>
-                    <button @click="openSubcategory(category,category.id)" class="btn text-secondary">子選單</button>
+                    <button @click="openSubcategory(category)" class="btn text-secondary">子選單</button>
                   </td>
                 </tr>
               </tbody>
@@ -303,11 +331,14 @@ onMounted(async () => {
                 <option value="published">已上架</option>
                 <option value="unpublished">未上架</option>
               </select>
-              <button @click="openEditSubCategoryModal({})" type="button" class="btn btn-primary">新增子選單</button>
+              <button @click="openEditSubCategoryModal({})" type="button" class="btn btn-primary" :disabled="!categoryId">新增子選單</button>
             </div>
           </div>
           <div class="card-body p-0">
-            <div v-if="subCategoriesData.length !== 0" class="table-responsive">
+            <div v-if="subCategoriesData.length === 0" class="text-center p-3">
+              <p class="text-muted">尚無子類別資料</p>
+            </div>
+            <div v-else class="table-responsive">
               <table class="table table-borderless align-middle table-hover">
                 <thead class="table-light">
                   <tr>
@@ -325,7 +356,7 @@ onMounted(async () => {
                       <input class="form-check-input" type="checkbox" />
                     </td>
                     <td>{{ subcategory.name }}</td>
-                    <td><span class="badge bg-success">{{ subcategory.is_enabled ? '已上架' : '未上架' }}</span></td>
+                    <td><span class="badge" :class="[ subcategory.is_enabled ? 'bg-success' : 'bg-secondary']">{{ subcategory.is_enabled ? '已上架' : '未上架' }}</span></td>
                     <td colspan="1" class="text-end">
                       <button @click="openEditSubCategoryModal(subcategory)" type="button" class="btn text-primary">編輯</button>
                       <button @click="deleteSubCategory(subcategory.id)" type="button" class="btn text-danger">刪除</button>
@@ -333,9 +364,6 @@ onMounted(async () => {
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div v-else class="text-center p-3">
-              <p class="text-muted">尚無子類別資料</p>
             </div>
           </div>
         </div>
@@ -347,7 +375,7 @@ onMounted(async () => {
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">{{ selectedCategory.id ? '編輯主類別' : '新增主類別' }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
             <div class="row">
@@ -376,7 +404,7 @@ onMounted(async () => {
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">{{ selectedSubCategory.categoryId ? '編輯子類別' : '新增子類別' }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
             <div class="row">

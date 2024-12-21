@@ -1,28 +1,74 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 
-  const menuData = ref([]);
-  const api = import.meta.env.VITE_API_URL;
-  const productData = ref([]);
-  onMounted (async () => {
-      try {
-          const { data: categories } = await axios.get(`${api}/categories/all`);
-          menuData.value = Object.values(categories.data);
+// 獲取路由資訊
+const route = useRoute();
+const category = ref('');
+const subcategory = ref('');
+const menuData = ref([]); // 儲存分類資料
+const api = import.meta.env.VITE_API_URL; // API URL
+const productData = ref([]); // 儲存商品資料
+const pagination = ref({}); // 儲存分頁資料
+const totalPages = ref(0); // 儲存總頁數
 
-          const { data: products } = await axios.get(`${api}/products/all`);
-          productData.value = Object.values(products.data);
-          
+// 方法：取得商品資料
+const fetchProducts = async (page, category, subcategory) => {
+  try {
+    const res = await axios.get(`${api}/products/all`, {
+      params: { page,category, subcategory },
+    });
 
-      } catch (error) {
-          console.error('API 請求失敗:', error);
-      }
-  })
+    // 更新商品資料
+    productData.value = res.data.data.products || [];
+    pagination.value = res.data.data.pagination;
+    totalPages.value = pagination.value.totalPages;
 
+  } catch (error) {
+    console.error('取得商品資料失敗:', error);
+  }
+};
 
-  // /products/all
+// 方法：取得分類資料
+const fetchCategories = async () => {
+  try {
+    const { data: categories } = await axios.get(`${api}/categories/all`);
+    menuData.value = Object.values(categories.data);
+  } catch (error) {
+    console.error('取得分類資料失敗:', error);
+  }
+};
 
+// 切換頁面
+const changePage = async (page) => {
+  await fetchProducts(page, category.value, subcategory.value);
+}
 
+// 初始化：取得分類和商品資料
+onMounted(async () => {
+  // 解碼參數（將 `+` 還原為空格）
+  category.value = route.query.category?.replace(/\+/g, ' ') || '';
+  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || '';
+
+  // 取得分類和商品資料
+  await fetchCategories();
+  await fetchProducts(1, category.value, subcategory.value);
+});
+
+// 監聽路由參數變化
+watch(
+  () => [route.query.category, route.query.subcategory], // 同時監聽 category 和 subcategory
+  ([newCategory, newSubcategory]) => {
+    // 更新分類參數
+    category.value = newCategory?.replace(/\+/g, ' ') || '';
+    subcategory.value = newSubcategory?.replace(/\+/g, ' ') || '';
+
+    if (category.value !== '' || subcategory.value !== '' || category.value === '') {
+      fetchProducts(1, category.value, subcategory.value); // 預設回到第一頁
+    }
+  }
+);
 </script>
 
 <template>
@@ -40,9 +86,9 @@
         <aside class="mb-6 mb-md-0 col-lg-3 col-md-4 d-none d-lg-block">
           <div class="accordion" id="accordionProductsPage">
             <div v-for="item in menuData" :key="item.id" class="accordion-item border-0">
-              <h2 class="accordion-header border-bottom" :id="`productList${item.id}`">
+              <h2 class="accordion-header" :id="`productList${item.id}`">
                 <button
-                  class="accordion-button px-0 collapsed"
+                  class="accordion-button collapsed fw-bold border-0 shadow-none"
                   type="button"
                   data-bs-toggle="collapse"
                   :data-bs-target="`#collapse${item.id}`"
@@ -60,11 +106,21 @@
               >
                 <div class="accordion-body p-0">
                   <ul class="navbar-nav px-3">
-                    <li v-for="subcategory in Object.values(item.subcategories)" :key="subcategory.id" class="nav-item">
-                      <router-link :to="`/shop/shop-products/${item.id}/${subcategory.id}`" class="nav-link"
-                        >{{ subcategory.name }}</router-link
-                      >
-                    </li>
+                    <li v-for="subcategory in Object.values(item.subcategories)"
+                    :key="subcategory.id"
+                    class="nav-item">
+                  <router-link
+                    :to="{
+                      name: 'shop-products',
+                      query: {
+                        category: item.name,
+                        subcategory: subcategory.name
+                      }
+                    }"
+                    class="nav-link ps-3">
+                    {{ subcategory.name }}
+                  </router-link>
+                </li>
                   </ul>
                 </div>
               </div>
@@ -72,286 +128,52 @@
           </div>
         </aside>
         <section class="col-lg-9 col-md-12">
+          <div class="row justify-content-between mb-4">
+            <h4 class="col">{{ category ? category : '所有商品' }}</h4>
+            <div class="col-2">
+              <select class="form-select select-sort">
+                <option selected>商品排序</option>
+                <option value="newest">上架時間: 由新到舊</option>
+                <option value="oldest">上架時間: 由舊到新</option>
+                <option value="highPrice">價格: 由高至低</option>
+                <option value="lowPrice">價格: 由低至高</option>
+              </select>
+            </div>
+          </div>
           <div class="row row-cols-2 row-cols-xl-4 row-cols-lg-3 g-3 mb-4">
-            <div class="col">
-              <div class="card">
+            <div class="col" v-for="product in productData" :key="product.id">
+              {{  }}
+              <div class="card h-100">
                 <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
+                  :src="product.imageUrl"
                   class="card-img-top"
                   alt="..."
                 />
                 <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card">
-                <img
-                  src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-                  class="card-img-top"
-                  alt="..."
-                />
-                <div class="card-body">
-                  <h5 class="card-title">
-                    iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-                  </h5>
-                  <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-                  <router-link
-                    to="/shop/shop-product"
-                    class="btn btn-outline-secondary"
-                    >查看商品</router-link
-                  >
+                  <p class="card-title text-center">{{ product.title }}</p>
+                  <router-link :to="`/shop/shop-product/${product.id}`" class="btn btn-outline-secondary">查看商品</router-link>
                 </div>
               </div>
             </div>
           </div>
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-              <li class="page-item disabled">
-                <a class="page-link">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-chevron-left"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                    />
+              <li class="page-item mx-1" :class="{ disabled: pagination.currentPage === 1 }">
+                <button class="page-link" @click="changePage(pagination.currentPage - 1)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
                   </svg>
-                </a>
+                </button>
               </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-chevron-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                    />
+              <li v-for="page in totalPages" :key="page" class="page-item mx-1" :class="{ active: page === pagination.currentPage }">
+                  <button class="page-link rounded-1" @click="changePage(page)">{{ page }}</button>
+              </li>
+              <li class="page-item mx-1" :class="{ disabled: pagination.currentPage === totalPages }">
+                <button class="page-link" @click="changePage(pagination.currentPage + 1)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
                   </svg>
-                </a>
+                </button>
               </li>
             </ul>
           </nav>
