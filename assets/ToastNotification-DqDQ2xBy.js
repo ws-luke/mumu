@@ -1,0 +1,1 @@
+import{o as n,c as r,i as s}from"./index-Hf8QJDxd.js";const _={__name:"ToastNotification",setup(a,{expose:t}){return t({showSuccessToast:o=>{s.success(o)},showErrorToast:o=>{s.error(o)},showInfoToast:o=>{s.info(o)},showWarningToast:o=>{s.warning(o)}}),(o,w)=>(n(),r("div"))}};export{_};
