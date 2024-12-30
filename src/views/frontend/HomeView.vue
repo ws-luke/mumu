@@ -1,3 +1,40 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+const api = import.meta.env.VITE_API_URL;
+
+// const cableData = ref([]) //充電線
+// const generalLanyardData = ref([]) //一般掛繩
+// const chargingCableLanyardData = ref([]) // 充電掛繩
+// const magneticAccessoriesData = ref([]) //磁吸配件
+// const mobilePhoneCaseData = ref([]) //手機殼
+
+const productsData = ref();
+const menuData = ref([]) // 儲存分類資料
+// 方法：取得分類資料
+const fetchCategories = async () => {
+  try {
+    const { data: categories } = await axios.get(`${api}/categories/all`)
+    menuData.value = Object.values(categories.data)
+  } catch (error) {
+    console.error('取得分類資料失敗:', error)
+  }
+}
+onMounted(async () => {
+  try {
+    const { data } = await axios.get(`${api}/products/`);
+    productsData.value = Object.values(data.data.products);
+    await fetchCategories();
+    menuData.value = Object.values(data.data.categories);
+    console.log(productsData.value);
+    console.log(menuData.value);
+
+  } catch (error) {
+    console.error('API 請求失敗:', error);
+  }
+})
+</script>
+
 <template>
   <div>
     <!-- 輪播圖 -->
@@ -74,7 +111,10 @@
     </section>
     <!-- 線材類 -->
     <div class="container mb-5">
-      <h2 class="fw-bold text-center mb-5">線材類</h2>
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="fw-bold text-center">線材類</h2>
+        <router-link class="">查看全部</router-link>
+      </div>
       <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
         <div class="col">
           <div class="card">

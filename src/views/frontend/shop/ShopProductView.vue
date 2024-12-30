@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router';
-import axios from 'axios';
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/free-mode'
@@ -10,190 +10,174 @@ import 'swiper/css/thumbs'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
 // 定義 refs
 const thumbsSwiper = ref(null)
-const api = import.meta.env.VITE_API_URL; // API URL
-const { id } = useRoute().params;
-const product = ref({}); // 商品資訊
-const productVariants = ref();
-// 定義 modules
+const api = import.meta.env.VITE_API_URL // API URL
+const { id } = useRoute().params
+const route = useRoute()
+const product = ref({}) // 商品資訊
+const productVariants = ref()
+const loadedImages = ref({}) // 用於追蹤每個圖片是否載入完成
 const modules = [FreeMode, Navigation, Thumbs]
+const category = ref('')
+const subcategory = ref('')
+const model = ref('')
 
 // 取得商品
 const getProduct = async () => {
   try {
-    const { data } = await axios.get(`${api}/products/${id}`);
-    product.value = data.data;
-    productVariants.value = data.data.productVariants;
+    const { data } = await axios.get(`${api}/products/${id}`)
+    product.value = data.data
+    productVariants.value = data.data.productVariants
   } catch (error) {
-    console.error('取得商品失敗', error);
+    console.error('取得商品失敗', error)
   }
 }
 // 設定輪播圖片
 const setThumbsSwiper = swiper => {
   thumbsSwiper.value = swiper
 }
-
+// 當圖片成功載入後，更新 `loadedImages` 狀態
+const onImageLoad = productId => {
+  loadedImages.value[productId] = true
+}
 onMounted(async () => {
   try {
-    await getProduct();
+    await getProduct()
   } catch (error) {
-    console.error('取得商品失敗', error);
+    console.error('取得商品失敗', error)
   }
 })
+// 監聽路由參數變化
+watch(
+  () => [route.query.category, route.query.subcategory], // 同時監聽 category 和 subcategory
+  ([newCategory, newSubcategory]) => {
+    // 更新分類參數
+    category.value = newCategory?.replace(/\+/g, ' ') || ''
+    subcategory.value = newSubcategory?.replace(/\+/g, ' ') || ''
+  },
+)
 </script>
 
-
 <template>
-  <div>
-    <section class="mt-3">
-      <div class="container mb-5">
-        <nav aria-label="breadcrumb" class="mb-4">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <router-link to="/" class="text-decoration-none"
-                >首頁</router-link
-              >
-            </li>
-            <li class="breadcrumb-item">
-              <router-link to="/shop/shop-products" class="text-decoration-none"
-                >產品列表</router-link
-              >
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-              {{product.title}}
-            </li>
-          </ol>
-        </nav>
-        <div class="row">
-          <div class="col-md-6">
-            <swiper
-              :style="{
-                '--swiper-navigation-color': '#fff',
-                '--swiper-pagination-color': '#fff',
-              }"
-              :loop="true"
-              :spaceBetween="10"
-              :navigation="true"
-              :thumbs="{ swiper: thumbsSwiper }"
-              :modules="modules"
-              class="mySwiper2 mb-3"
+  <section class="mt-3">
+    <div class="container mb-5">
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <router-link to="/" class="text-decoration-none">首頁</router-link>
+          </li>
+          <li class="breadcrumb-item">
+            <router-link to="/shop/shop-products" class="text-decoration-none"
+              >產品列表</router-link
             >
-              <swiper-slide v-for="url in product.imagesUrl" :key="url">
-                <img :src="url" />
-              </swiper-slide>
-            </swiper>
-            <swiper
-              @swiper="setThumbsSwiper"
-              :loop="true"
-              :spaceBetween="10"
-              :slidesPerView="4"
-              :freeMode="true"
-              :watchSlidesProgress="true"
-              :modules="modules"
-              class="mySwiper"
-            >
-              <swiper-slide v-for="url in product.imagesUrl" :key="url">
-                <img :src="url" />
-              </swiper-slide>
-            </swiper>
-          </div>
-          <div class="col-md-6">
+          </li>
+          <li class="breadcrumb-item">
             <router-link
-              to="/shop/shop-products"
-              class="mb-2 d-block text-decoration-none"
-              >{{product.category}}</router-link
+              :to="`/shop/shop-products?category=${product.category}`"
+              class="text-decoration-none"
+              >{{ product.category }}</router-link
             >
-            <h1>{{product.title}}</h1>
-            <div class="fs-4">
-              <span class="fw-bold text-dark">{{ product.price }}</span>
-              <span class="text-decoration-line-through text-muted">{{ product.origin_price }}</span>
-            </div>
-            <hr class="my-4" />
-            <!-- <h5 class="">購買數量不同價格</h5>
-            <ul>
-              <li>1 - 49 : $160</li>
-              <li>50 - 299 : $150</li>
-              <li>300 - 499 : $145</li>
-              <li>500 : $130</li>
-            </ul> -->
-            <div class="my-4 d-flex gap-1">
-              <div class="">
-                <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked/>
-                <label class="btn btn-outline-secondary btn-lg me-2" for="success-outlined">1m</label>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ product.title }}
+          </li>
+        </ol>
+      </nav>
+      <div class="row">
+        <div class="col-md-6">
+          <swiper
+            :style="{
+              '--swiper-navigation-color': '#fff',
+              '--swiper-pagination-color': '#fff',
+            }"
+            :loop="true"
+            :spaceBetween="10"
+            :navigation="true"
+            :thumbs="{ swiper: thumbsSwiper }"
+            :modules="modules"
+            class="mySwiper2 mb-3"
+          >
+            <swiper-slide v-for="url in product.imagesUrl" :key="url">
+              <div
+                v-if="!loadedImages[product.id]"
+                class="bg-light placeholder-glow"
+              >
+                <span class="placeholder w-100 h-100"></span>
               </div>
-
-              <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off"/>
-              <label class="btn btn-outline-secondary btn-lg me-2" for="danger-outlined">1.2m</label>
-
-
-            </div>
-            <input class="form-control form-control-lg" type="number" value="1" name="quantity"/>
-            <div class="mt-3 g-2 align-items-center row">
-              <div class="d-grid col-xxl-4 col-lg-6 col-md-8 col-6">
-                <button type="button" class="btn btn-primary">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="me-2"
-                  >
-                    <path
-                      d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
-                    ></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path></svg
-                  >加入購物車
-                </button>
+              <img @load="onImageLoad(product.id)" :src="url" />
+            </swiper-slide>
+          </swiper>
+          <swiper
+            @swiper="setThumbsSwiper"
+            :loop="true"
+            :spaceBetween="10"
+            :slidesPerView="4"
+            :freeMode="true"
+            :watchSlidesProgress="true"
+            :modules="modules"
+            class="mySwiper"
+          >
+            <swiper-slide v-for="url in product.imagesUrl" :key="url">
+              <div
+                v-if="!loadedImages[product.id]"
+                class="bg-light placeholder-glow"
+              >
+                <span class="placeholder w-100 h-100"></span>
               </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-light">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <hr class="my-4" />
-            <div>
-              <table class="table table-borderless mb-0">
-                <tbody>
-                  <tr>
-                    <td>材質:</td>
-                    <td>{{ product.material }}</td>
-                  </tr>
-                  <tr>
-                    <td>重量:</td>
-                    <td>{{ product.weight }}g</td>
-                  </tr>
-                  <tr>
-                    <td>保固:</td>
-                    <td>{{ product.warranty }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+              <img @load="onImageLoad(product.id)" :src="url" />
+            </swiper-slide>
+          </swiper>
+        </div>
+        <div class="col-md-6">
+          <p class="d-flex">
+            <router-link
+              :to="`/shop/shop-products?category=${product.category}`"
+              class="mb-2 d-block text-decoration-none"
+              >{{ product.category }}</router-link
+            >
+            <span class="mx-2">/</span>
+            <router-link
+              :to="{
+                name: 'shop-products',
+                query: {
+                  category: product.category,
+                  subcategory: product.subcategory,
+                },
+              }"
+              class="mb-2 d-block text-decoration-none"
+              >{{ product.subcategory }}</router-link
+            >
+          </p>
+
+          <h1>{{ product.title }}</h1>
+          <p class="text-muted">{{ model }}</p>
+          <div class="fs-4">
+            <span class="fw-bold fs-3 text-danger">$ {{product.origin_price}}</span>
+          </div>
+          <hr class="my-4" />
+          <p>顏色</p>
+          <hr class="my-4" />
+          <div>
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td>材質:</td>
+                  <td>{{ product.material }}</td>
+                </tr>
+                <tr>
+                  <td>重量:</td>
+                  <td>{{ product.weight }}g</td>
+                </tr>
+                <tr>
+                  <td>保固:</td>
+                  <td>{{ product.warranty }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 <style scoped>
 .swiper {

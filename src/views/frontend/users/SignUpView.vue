@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 const router = useRouter()
-const api_path = 'http://127.0.0.1:3000/api/user'
+const api = import.meta.env.VITE_API_URL
 const userDate = ref({
   email: '', //信箱
   password: '', //密碼
@@ -20,7 +20,7 @@ const userDate = ref({
 
 const signUpInfo = async () => {
   try {
-    const res = await axios.post(`${api_path}/sign_up`, userDate.value)
+    const res = await axios.post(`${api}/sign_up`, userDate.value)
     if (res.data.success === true) {
       router.push({ name: 'SignIn' })
       toast.success('註冊成功，請至登入頁登入', {
@@ -79,7 +79,7 @@ const signUpInfo = async () => {
             >
             <input
               v-model="userDate.ubn"
-              type="number"
+              type="text"
               class="form-control"
               id="floatingInput"
             />
@@ -131,7 +131,7 @@ const signUpInfo = async () => {
             >
             <input
               v-model="userDate.phoneNumber"
-              type="number"
+              type="text"
               class="form-control"
               id="floatingInput"
             />
@@ -163,16 +163,12 @@ const signUpInfo = async () => {
             <label class="form-label fw-bold fs-5" for="floatingInput"
               >對接業務</label
             >
-            <select
-              v-model="userDate.businessLiaison"
-              class="form-select"
-              aria-label="Default select "
-            >
+            <select v-model="userDate.businessLiaison" class="form-select">
               <option selected>業務</option>
-              <option value="1">Sherry</option>
-              <option value="2">Eileen</option>
-              <option value="3">Billy</option>
-              <option value="4">Luke</option>
+              <option value="Sherry">Sherry</option>
+              <option value="Eileen">Eileen</option>
+              <option value="Billy">Billy</option>
+              <option value="Luke">Luke</option>
             </select>
           </div>
         </div>

@@ -1,79 +1,88 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import axios from 'axios';
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 
 // 獲取路由資訊
-const route = useRoute();
-const category = ref('');
-const subcategory = ref('');
-const menuData = ref([]); // 儲存分類資料
-const api = import.meta.env.VITE_API_URL; // API URL
-const productData = ref([]); // 儲存商品資料
-const pagination = ref({}); // 儲存分頁資料
-const totalPages = ref(0); // 儲存總頁數
+const route = useRoute()
+const category = ref('')
+const subcategory = ref('')
+const menuData = ref([]) // 儲存分類資料
+const api = import.meta.env.VITE_API_URL // API URL
+const productData = ref([]) // 儲存商品資料
+const pagination = ref({}) // 儲存分頁資料
+const totalPages = ref(0) // 儲存總頁數
+const loadedImages = ref({}) // 用於追蹤每個圖片是否載入完成
 
 // 方法：取得商品資料
 const fetchProducts = async (page, category, subcategory) => {
   try {
     const res = await axios.get(`${api}/products/all`, {
-      params: { page,category, subcategory },
-    });
+      params: { page, category, subcategory },
+    })
 
     // 更新商品資料
-    productData.value = res.data.data.products || [];
-    pagination.value = res.data.data.pagination;
-    totalPages.value = pagination.value.totalPages;
-
+    productData.value = res.data.data.products || []
+    pagination.value = res.data.data.pagination
+    totalPages.value = pagination.value.totalPages
   } catch (error) {
-    console.error('取得商品資料失敗:', error);
+    console.error('取得商品資料失敗:', error)
   }
-};
+}
 
 // 方法：取得分類資料
 const fetchCategories = async () => {
   try {
-    const { data: categories } = await axios.get(`${api}/categories/all`);
-    menuData.value = Object.values(categories.data);
+    const { data: categories } = await axios.get(`${api}/categories/all`)
+    menuData.value = Object.values(categories.data)
   } catch (error) {
-    console.error('取得分類資料失敗:', error);
+    console.error('取得分類資料失敗:', error)
   }
-};
+}
 
 // 切換頁面
-const changePage = async (page) => {
-  await fetchProducts(page, category.value, subcategory.value);
+const changePage = async page => {
+  await fetchProducts(page, category.value, subcategory.value)
+}
+
+// 當圖片成功載入後，更新 `loadedImages` 狀態
+const onImageLoad = productId => {
+  loadedImages.value[productId] = true
 }
 
 // 初始化：取得分類和商品資料
 onMounted(async () => {
   // 解碼參數（將 `+` 還原為空格）
-  category.value = route.query.category?.replace(/\+/g, ' ') || '';
-  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || '';
+  category.value = route.query.category?.replace(/\+/g, ' ') || ''
+  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || ''
 
   // 取得分類和商品資料
-  await fetchCategories();
-  await fetchProducts(1, category.value, subcategory.value);
-});
+  await fetchCategories()
+  await fetchProducts(1, category.value, subcategory.value)
+})
 
 // 監聽路由參數變化
 watch(
   () => [route.query.category, route.query.subcategory], // 同時監聽 category 和 subcategory
   ([newCategory, newSubcategory]) => {
     // 更新分類參數
-    category.value = newCategory?.replace(/\+/g, ' ') || '';
-    subcategory.value = newSubcategory?.replace(/\+/g, ' ') || '';
+    category.value = newCategory?.replace(/\+/g, ' ') || ''
+    subcategory.value = newSubcategory?.replace(/\+/g, ' ') || ''
 
-    if (category.value !== '' || subcategory.value !== '' || category.value === '') {
-      fetchProducts(1, category.value, subcategory.value); // 預設回到第一頁
+    if (
+      category.value !== '' ||
+      subcategory.value !== '' ||
+      category.value === ''
+    ) {
+      fetchProducts(1, category.value, subcategory.value) // 預設回到第一頁
     }
-  }
-);
+  },
+)
 </script>
 
 <template>
   <div>
-    <div class="container mt-4">
+    <div class="container-fluid mt-4">
       <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -85,7 +94,11 @@ watch(
       <div class="row">
         <aside class="mb-6 mb-md-0 col-lg-3 col-md-4 d-none d-lg-block">
           <div class="accordion" id="accordionProductsPage">
-            <div v-for="item in menuData" :key="item.id" class="accordion-item border-0">
+            <div
+              v-for="item in menuData"
+              :key="item.id"
+              class="accordion-item border-0"
+            >
               <h2 class="accordion-header" :id="`productList${item.id}`">
                 <button
                   class="accordion-button collapsed fw-bold border-0 shadow-none"
@@ -106,21 +119,24 @@ watch(
               >
                 <div class="accordion-body p-0">
                   <ul class="navbar-nav px-3">
-                    <li v-for="subcategory in Object.values(item.subcategories)"
-                    :key="subcategory.id"
-                    class="nav-item">
-                  <router-link
-                    :to="{
-                      name: 'shop-products',
-                      query: {
-                        category: item.name,
-                        subcategory: subcategory.name
-                      }
-                    }"
-                    class="nav-link ps-3">
-                    {{ subcategory.name }}
-                  </router-link>
-                </li>
+                    <li
+                      v-for="subcategory in Object.values(item.subcategories)"
+                      :key="subcategory.id"
+                      class="nav-item"
+                    >
+                      <router-link
+                        :to="{
+                          name: 'shop-products',
+                          query: {
+                            category: item.name,
+                            subcategory: subcategory.name,
+                          },
+                        }"
+                        class="nav-link ps-3"
+                      >
+                        {{ subcategory.name }}
+                      </router-link>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -140,38 +156,88 @@ watch(
               </select>
             </div>
           </div>
-          <div class="row row-cols-2 row-cols-xl-4 row-cols-lg-3 g-3 mb-4">
+          <div class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-3 mb-4">
             <div class="col" v-for="product in productData" :key="product.id">
-              {{  }}
-              <div class="card h-100">
+              <router-link
+                class="card h-100 text-decoration-none"
+                :to="`/shop/shop-product/${product.id}`"
+              >
+                <div
+                  v-if="!loadedImages[product.id]"
+                  class="card-img-top bg-light placeholder-glow h-100"
+                >
+                  <span class="placeholder w-100 h-100"></span>
+                </div>
                 <img
                   :src="product.imageUrl"
-                  class="card-img-top"
-                  alt="..."
+                  class="card-img-top img-fluid"
+                  :alt="product.title"
+                  @load="onImageLoad(product.id)"
                 />
                 <div class="card-body">
                   <p class="card-title text-center">{{ product.title }}</p>
-                  <router-link :to="`/shop/shop-product/${product.id}`" class="btn btn-outline-secondary">查看商品</router-link>
+                  <p class="text-center price mb-0 fw-bold">
+                    NT$ {{ product.price }}
+                  </p>
                 </div>
-              </div>
+              </router-link>
             </div>
           </div>
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-              <li class="page-item mx-1" :class="{ disabled: pagination.currentPage === 1 }">
-                <button class="page-link" @click="changePage(pagination.currentPage - 1)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+              <li
+                class="page-item mx-1"
+                :class="{ disabled: pagination.currentPage === 1 }"
+              >
+                <button
+                  class="page-link"
+                  @click="changePage(pagination.currentPage - 1)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-chevron-left"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                    />
                   </svg>
                 </button>
               </li>
-              <li v-for="page in totalPages" :key="page" class="page-item mx-1" :class="{ active: page === pagination.currentPage }">
-                  <button class="page-link rounded-1" @click="changePage(page)">{{ page }}</button>
+              <li
+                v-for="page in totalPages"
+                :key="page"
+                class="page-item mx-1"
+                :class="{ active: page === pagination.currentPage }"
+              >
+                <button class="page-link rounded-1" @click="changePage(page)">
+                  {{ page }}
+                </button>
               </li>
-              <li class="page-item mx-1" :class="{ disabled: pagination.currentPage === totalPages }">
-                <button class="page-link" @click="changePage(pagination.currentPage + 1)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+              <li
+                class="page-item mx-1"
+                :class="{ disabled: pagination.currentPage === totalPages }"
+              >
+                <button
+                  class="page-link"
+                  @click="changePage(pagination.currentPage + 1)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-chevron-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                    />
                   </svg>
                 </button>
               </li>
@@ -182,3 +248,8 @@ watch(
     </div>
   </div>
 </template>
+<style scoped>
+.price {
+  color: #1c7637;
+}
+</style>

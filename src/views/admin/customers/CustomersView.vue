@@ -1,5 +1,35 @@
+<script setup>
+import ToastNotification from '@/components/ToastNotification.vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+const api = import.meta.env.VITE_API_URL
+const toast = ref(null) // 彈窗訊息
+const customersData = ref([]) // 會員資料
+const pagination = ref({}) // 分頁資料
+
+const getCategories = async () => {
+  try {
+    const { data } = await axios.get(`${api}/admin/users`)
+    customersData.value = Object.values(data.data)
+    console.log(customersData.value)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+onMounted(async () => {
+  try {
+    await getCategories()
+  } catch (error) {
+    console.error(error.message)
+  }
+})
+</script>
+
 <template>
   <div class="container-fluid">
+    <ToastNotification ref="toast"></ToastNotification>
     <div class="row mb-4">
       <div class="col">
         <div class="d-flex align-items-center justify-content-between">
@@ -51,33 +81,44 @@
                     <input class="form-check-input" type="checkbox" />
                   </th>
                   <th colspan="1">姓名</th>
-                  <th colspan="1">等級</th>
+                  <th colspan="1">狀態</th>
+                  <!-- <th colspan="1">等級</th> -->
                   <th colspan="1">電話</th>
                   <th colspan="1">電子郵件</th>
                   <th colspan="1">總消費金額</th>
-                  <th colspan="1">上次消費日期</th>
+                  <th colspan="1">註冊日期</th>
                   <th colspan="1"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr v-for="customer in customersData" :key="customer.id">
                   <td colspan="1">
                     <input class="form-check-input" type="checkbox" />
                   </td>
-                  <td>賴小姐</td>
-                  <td>黑卡會員</td>
-                  <td>0912-345678</td>
-                  <td>sherry@gmail.com</td>
+                  <td>{{ customer.userName }}</td>
+                  <!-- <td>黑卡會員</td> -->
+                  <td>
+                    <span
+                      class="badge"
+                      :class="[
+                        customer.verified ? 'bg-success' : 'bg-secondary',
+                      ]"
+                      >{{ customer.verified ? '已驗證' : '未驗證' }}</span
+                    >
+                  </td>
+                  <td>{{ customer.phoneNumber }}</td>
+                  <td>{{ customer.email }}</td>
                   <td>4,000,000</td>
-                  <td>2024/11/08</td>
+                  <td>{{ customer.createdAt }}</td>
                   <td>
                     <div class="dropdown">
-                      <buttom
+                      <button
                         class="text-reset btn p-0 border-0"
                         id=""
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
-                        ><svg
+                      >
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="18"
                           height="18"
@@ -91,8 +132,9 @@
                         >
                           <circle cx="12" cy="12" r="1"></circle>
                           <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle></svg
-                      ></buttom>
+                          <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                      </button>
                       <div
                         class="dropdown-menu dropdown-menu-end py-0"
                         aria-labelledby=""
@@ -181,7 +223,11 @@
                     >
                   </li>
                   <li class="page-item mx-1">
-                    <a class="page-link rounded-1" role="button" tabindex="0" href="#"
+                    <a
+                      class="page-link rounded-1"
+                      role="button"
+                      tabindex="0"
+                      href="#"
                       >2</a
                     >
                   </li>
