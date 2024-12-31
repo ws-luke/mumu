@@ -11,24 +11,31 @@ const api = import.meta.env.VITE_API_URL;
 
 const productsData = ref();
 const menuData = ref([]) // 儲存分類資料
+
+// 取得所有商品
+const fetchProducts = async () => {
+  try {
+    const { data } = await axios.get(`${api}/products/`);
+    productsData.value = Object.values(data.data.products);
+    console.log(`所有商品`,productsData.value);
+  } catch (error) {
+    console.error('API 請求失敗:', error);
+  }
+}
 // 方法：取得分類資料
 const fetchCategories = async () => {
   try {
     const { data: categories } = await axios.get(`${api}/categories/all`)
-    menuData.value = Object.values(categories.data)
+    menuData.value = Object.values(categories.data);
+    console.log(`所有類別`,menuData.value);
   } catch (error) {
     console.error('取得分類資料失敗:', error)
   }
 }
 onMounted(async () => {
   try {
-    const { data } = await axios.get(`${api}/products/`);
-    productsData.value = Object.values(data.data.products);
+    await fetchProducts();
     await fetchCategories();
-    menuData.value = Object.values(data.data.categories);
-    console.log(productsData.value);
-    console.log(menuData.value);
-
   } catch (error) {
     console.error('API 請求失敗:', error);
   }
