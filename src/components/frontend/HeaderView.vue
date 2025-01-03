@@ -23,7 +23,7 @@
           ><LogoComponent></LogoComponent
         ></router-link>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">全部商品</router-link>
             </li>
@@ -32,7 +32,7 @@
             </li>
           </ul>
         </div>
-        <div class="d-flex">
+        <div class="d-none">
           <!-- 個人 -->
           <router-link to="/users/signIn" class="nav-link">
             <svg
