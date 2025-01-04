@@ -1,0 +1,1 @@
+import{o as a,c as n,k as s}from"./index-ehUiTKS-.js";const _={__name:"ToastNotification",setup(r,{expose:t}){return t({showSuccessToast:o=>{s.success(o)},showErrorToast:o=>{s.error(o)},showInfoToast:o=>{s.info(o)},showWarningToast:o=>{s.warning(o)}}),(o,w)=>(a(),n("div"))}};export{_};
