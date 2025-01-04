@@ -24,8 +24,9 @@ const product = ref({
   weight: '', // 重量
   material: '', // 材質
   warranty: '', // 保固
-  origin_price: '', // 原價
-  price: '', // 售價
+  retail_Price: '', // 終端售價
+  origin_price: '', // 最低終端售價
+  price: '', // 批發價
   unit: '', // 單位
   is_enabled: '', // 是否上架
   is_stock: '', // 庫存
@@ -335,11 +336,15 @@ onMounted ( async () => {
           <div class="card-body">
             <h4 class="mb-4 h5">產品價格</h4>
             <div class="mb-3">
-              <label class="form-label" for="productOrigin_price">原價</label>
+              <label class="form-label" for="productRetail_price">終端售價</label>
+              <input class="form-control" id="productRetail_price" type="number" v-model="product.retail_Price" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="productOrigin_price">最低終端售價</label>
               <input class="form-control" id="productOrigin_price" type="number" v-model="product.origin_price" />
             </div>
             <div class="mb-3">
-              <label class="form-label" for="productPrice">售價</label>
+              <label class="form-label" for="productPrice">批發價</label>
               <input class="form-control" id="productPrice" type="number" v-model="product.price" />
             </div>
           </div>

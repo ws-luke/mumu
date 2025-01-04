@@ -151,7 +151,7 @@ watch(
           <h1>{{ product.title }}</h1>
           <p class="text-muted">{{ model }}</p>
           <div class="fs-4">
-            <span class="fw-bold fs-3 text-danger">$ {{product.origin_price}}</span>
+            <span class="fw-bold fs-3 text-danger">$ {{product.retail_Price}}</span>
           </div>
           <hr class="my-4" />
           <p>顏色</p>

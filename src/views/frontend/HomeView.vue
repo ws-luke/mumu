@@ -8,38 +8,52 @@ const api = import.meta.env.VITE_API_URL;
 // const chargingCableLanyardData = ref([]) // 充電掛繩
 // const magneticAccessoriesData = ref([]) //磁吸配件
 // const mobilePhoneCaseData = ref([]) //手機殼
-
 const productsData = ref();
 const menuData = ref([]) // 儲存分類資料
-
+const categorizedProducts = ref({});
 // 取得所有商品
 const fetchProducts = async () => {
   try {
     const { data } = await axios.get(`${api}/products/`);
     productsData.value = Object.values(data.data.products);
-    console.log(`所有商品`,productsData.value);
+    const products = Object.values(data.data.products);
+    products.forEach(product => {
+      const category = product.category;
+      if (!categorizedProducts.value[category]) {
+        categorizedProducts.value[category] = []; // 若分類不存在，初始化為空陣列
+      }
+      categorizedProducts.value[category].push(product); // 將商品加入對應分類的陣列
+    });
+    // 確保在分類結束後再打印
+    // console.log('分類後的商品:', categorizedProducts.value);ㄋ
   } catch (error) {
     console.error('API 請求失敗:', error);
   }
 }
+
 // 方法：取得分類資料
 const fetchCategories = async () => {
   try {
     const { data: categories } = await axios.get(`${api}/categories/all`)
     menuData.value = Object.values(categories.data);
-    console.log(`所有類別`,menuData.value);
+    // console.log(`所有類別`,menuData.value);
   } catch (error) {
     console.error('取得分類資料失敗:', error)
   }
 }
+
+
+
+
 onMounted(async () => {
   try {
-    await fetchProducts();
-    await fetchCategories();
+    await Promise.all([fetchProducts(), fetchCategories()]);
   } catch (error) {
     console.error('API 請求失敗:', error);
   }
 })
+
+
 </script>
 
 <template>
@@ -116,202 +130,42 @@ onMounted(async () => {
         </button>
       </div>
     </section>
-    <!-- 線材類 -->
-    <div class="container mb-5">
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="fw-bold text-center">線材類</h2>
-        <router-link class="">查看全部</router-link>
-      </div>
-      <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">蘋果iPhone 15 雙Type-C編織充電線</h5>
-              <p class="card-text">適用於蘋果15以上手機</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">蘋果iPhone 15 雙Type-C編織充電線</h5>
-              <p class="card-text">適用於蘋果15以上手機</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">蘋果iPhone 15 雙Type-C編織充電線</h5>
-              <p class="card-text">適用於蘋果15以上手機</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i3.momoshop.com.tw/1700643770/goodsimg/0012/126/928/12126928_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">蘋果iPhone 15 雙Type-C編織充電線</h5>
-              <p class="card-text">適用於蘋果15以上手機</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="container mb-5" v-for="(products, category) in categorizedProducts" :key="category">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h2 class="fw-bold text-center">{{ category }}</h2>
+      <router-link 
+      :to="{
+        name: 'shop-products',
+        query: {
+          category: category,
+        },
+      }"
+       class="nav-link">查看全部</router-link>
     </div>
-    <!-- 掛繩類 -->
-    <div class="container mb-5">
-      <h2 class="fw-bold text-center mb-5">掛繩類</h2>
-      <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
-        <div class="col">
-          <div class="card">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
+      <div class="col" v-for="product in products.slice(0, 4)" :key="product.id">
+          <router-link
+            :to="`/shop/shop-product/${product.id}`"
+            class="card h-100 text-decoration-none">
             <img
-              src="https://i2.momoshop.com.tw/1692475354/goodsimg/0011/436/786/11436786_R.webp"
+              :src="product.imageUrl"
               class="card-img-top"
-              alt="..."
+              :alt="product.title"
             />
             <div class="card-body">
-              <h5 class="card-title">多彩6mm快拆手機掛繩-手腕帶</h5>
-              <p class="card-text">長度可調節，應使用需求自由調整</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
+              <p class="card-title text-center">{{ product.title }}</p>
+              <p class="text-center price mb-0 fw-bold">
+                NT$ {{ product.retail_Price }}
+              </p>
             </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1692475354/goodsimg/0011/436/786/11436786_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">多彩6mm快拆手機掛繩-手腕帶</h5>
-              <p class="card-text">長度可調節，應使用需求自由調整</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1692475354/goodsimg/0011/436/786/11436786_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">多彩6mm快拆手機掛繩-手腕帶</h5>
-              <p class="card-text">長度可調節，應使用需求自由調整</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1692475354/goodsimg/0011/436/786/11436786_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">多彩6mm快拆手機掛繩-手腕帶</h5>
-              <p class="card-text">長度可調節，應使用需求自由調整</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 手機殼 -->
-    <div class="container mb-5">
-      <h2 class="fw-bold text-center mb-5">手機殼</h2>
-      <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-              </h5>
-              <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-              </h5>
-              <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-              </h5>
-              <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img
-              src="https://i2.momoshop.com.tw/1726290379/goodsimg/0013/103/013/13103013_R.webp"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                iPhone 16 Pro Max 防撞手機保護殼 透明 霧透
-              </h5>
-              <p class="card-text">PC硬質背蓋+TPU軟質邊框</p>
-              <a href="#" class="btn btn-outline-secondary">查看商品</a>
-            </div>
-          </div>
-        </div>
+          </router-link>
       </div>
     </div>
   </div>
+  </div>
 </template>
+<style scoped>
+.price {
+  color: #1c7637;
+}
+</style>

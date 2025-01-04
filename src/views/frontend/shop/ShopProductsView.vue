@@ -177,7 +177,7 @@ watch(
                 <div class="card-body">
                   <p class="card-title text-center">{{ product.title }}</p>
                   <p class="text-center price mb-0 fw-bold">
-                    NT$ {{ product.price }}
+                    NT$ {{ product.retail_Price }}
                   </p>
                 </div>
               </router-link>
