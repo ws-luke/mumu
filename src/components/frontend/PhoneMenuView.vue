@@ -47,7 +47,7 @@
             <button
               class="accordion-button px-0 collapsed allProduct"
             >
-              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link" @click="closeOffcanvas">全部商品</router-link>
+              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link" @click="closeOffcanvas">所有商品</router-link>
             </button>
           </h2>
         <div v-for="item in menuData" :key="item.id" class="accordion-item border-0">

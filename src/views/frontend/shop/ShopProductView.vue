@@ -19,7 +19,10 @@ const loadedImages = ref({}) // 用於追蹤每個圖片是否載入完成
 const modules = [FreeMode, Navigation, Thumbs]
 const category = ref('')
 const subcategory = ref('')
-const model = ref('')
+const currentModel = ref(null) //當前型號
+const currentQuantity = ref(null) // 當前數量
+
+
 
 // 取得商品
 const getProduct = async () => {
@@ -27,9 +30,16 @@ const getProduct = async () => {
     const { data } = await axios.get(`${api}/products/${id}`)
     product.value = data.data
     productVariants.value = data.data.productVariants
+    currentModel.value = productVariants.value[0].model
   } catch (error) {
     console.error('取得商品失敗', error)
   }
+}
+
+// 更換商品型號 價格 數量
+const changeProductModel = (model) => {
+  currentModel.value = model.model
+  currentQuantity.value = model.quantity
 }
 // 設定輪播圖片
 const setThumbsSwiper = swiper => {
@@ -149,12 +159,13 @@ watch(
           </p>
 
           <h1>{{ product.title }}</h1>
-          <p class="text-muted">{{ model }}</p>
+          <p class="text-muted">{{ currentModel }}</p>
           <div class="fs-4">
             <span class="fw-bold fs-3 text-danger">$ {{product.retail_Price}}</span>
           </div>
           <hr class="my-4" />
           <p>顏色</p>
+          <button v-for="item in productVariants" :key="item" class="btn btn-outline-dark me-2" @click="changeProductModel(item)">{{ item.color }}</button>
           <hr class="my-4" />
           <div>
             <table class="table table-borderless mb-0">

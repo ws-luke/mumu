@@ -19,46 +19,46 @@ const fetchProducts = async (page, category, subcategory) => {
   try {
     const res = await axios.get(`${api}/products/all`, {
       params: { page, category, subcategory },
-    })
+    });
 
     // 更新商品資料
-    productData.value = res.data.data.products || []
-    pagination.value = res.data.data.pagination
-    totalPages.value = pagination.value.totalPages
+    productData.value = res.data.data.products || [];
+    pagination.value = res.data.data.pagination;
+    totalPages.value = pagination.value.totalPages;
   } catch (error) {
-    console.error('取得商品資料失敗:', error)
+    console.error('取得商品資料失敗:', error);
   }
 }
 
 // 方法：取得分類資料
 const fetchCategories = async () => {
   try {
-    const { data: categories } = await axios.get(`${api}/categories/all`)
-    menuData.value = Object.values(categories.data)
+    const { data: categories } = await axios.get(`${api}/categories/all`);
+    menuData.value = Object.values(categories.data);
   } catch (error) {
-    console.error('取得分類資料失敗:', error)
+    console.error('取得分類資料失敗:', error);
   }
 }
 
 // 切換頁面
 const changePage = async page => {
-  await fetchProducts(page, category.value, subcategory.value)
+  await fetchProducts(page, category.value, subcategory.value);
 }
 
 // 當圖片成功載入後，更新 `loadedImages` 狀態
 const onImageLoad = productId => {
-  loadedImages.value[productId] = true
+  loadedImages.value[productId] = true;
 }
 
 // 初始化：取得分類和商品資料
 onMounted(async () => {
   // 解碼參數（將 `+` 還原為空格）
-  category.value = route.query.category?.replace(/\+/g, ' ') || ''
-  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || ''
+  category.value = route.query.category?.replace(/\+/g, ' ') || '';
+  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || '';
 
   // 取得分類和商品資料
-  await fetchCategories()
-  await fetchProducts(1, category.value, subcategory.value)
+  await fetchCategories();
+  await fetchProducts(1, category.value, subcategory.value);
 })
 
 // 監聽路由參數變化
@@ -92,10 +92,10 @@ watch(
         </ol>
       </nav>
       <div class="row">
-        <aside class="mb-6 mb-md-0 col-lg-3 col-md-4 d-none d-lg-block">
+        <aside class="mb-6 mb-md-0 col-lg-3 col-xl-2 col-md-4 d-none d-lg-block">
           <div class="accordion" id="accordionProductsPage">
             <h2 class="accordion-header">
-              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link accordion-button fw-bold border-0 shadow-none allProduct">全部商品</router-link>
+              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link accordion-button fw-bold border-0 shadow-none allProduct">所有商品</router-link>
             </h2>
             <div
               v-for="item in menuData"
@@ -146,7 +146,7 @@ watch(
             </div>
           </div>
         </aside>
-        <section class="col-lg-9 col-md-12">
+        <section class="col-lg-9 col-xl-10 col-md-12">
           <div class="row justify-content-between mb-4">
             <h4 class="col">{{ category ? category : '所有商品' }}</h4>
             <div class="col-2">
@@ -159,8 +159,8 @@ watch(
               </select>
             </div>
           </div>
-          <div class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-3 mb-4">
-            <div class="col" v-for="product in productData" :key="product.id">
+          <div v-if="productData.length > 0" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-4">
+            <div  class="col" v-for="product in productData" :key="product.id">
               <router-link
                 class="card h-100 text-decoration-none"
                 :to="`/shop/shop-product/${product.id}`"
@@ -185,9 +185,11 @@ watch(
                 </div>
               </router-link>
             </div>
+
           </div>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
+          <p v-else class="text-center">暫時沒有商品</p>
+          <nav v-if="totalPages > 1" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center my-5">
               <li
                 class="page-item mx-1"
                 :class="{ disabled: pagination.currentPage === 1 }"
