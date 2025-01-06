@@ -94,6 +94,9 @@ watch(
       <div class="row">
         <aside class="mb-6 mb-md-0 col-lg-3 col-md-4 d-none d-lg-block">
           <div class="accordion" id="accordionProductsPage">
+            <h2 class="accordion-header">
+              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link accordion-button fw-bold border-0 shadow-none allProduct">全部商品</router-link>
+            </h2>
             <div
               v-for="item in menuData"
               :key="item.id"
@@ -252,4 +255,5 @@ watch(
 .price {
   color: #1c7637;
 }
+.allProduct::after{display: none;}
 </style>

@@ -17,6 +17,9 @@
 </script>
 
 <template>
+    <li class="nav-item">
+        <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">全部商品</router-link>
+    </li>
     <li v-for="item in menuData" :key="item.id" class="nav-item">
         <router-link :to="`/shop/shop-products/${item.id}`" class="nav-link"
         >{{ item.name }}</router-link

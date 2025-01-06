@@ -25,6 +25,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
+              <router-link :to="{name: 'collaboration'}" class="nav-link">批發、採購合作</router-link>
+            </li>
+            <li class="nav-item">
               <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">全部商品</router-link>
             </li>
             <li v-for="item in menuData" :key="item.id" class="nav-item">
@@ -104,7 +107,7 @@
           </router-link>
         </div>
         <button
-          class="btn d-flex d-lg-none order-first p-0"
+          class="btn d-flex d-lg-none p-0"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasRight"

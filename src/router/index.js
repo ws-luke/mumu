@@ -11,6 +11,11 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/collaboration', // 合作
+      name: 'collaboration',
+      component: () => import('@/views/frontend/CollaborationView.vue'),
+    },
+    {
       path: '/cart', // 購物車
       name: 'cart',
       component: () => import('@/views/frontend/CartView.vue'),
