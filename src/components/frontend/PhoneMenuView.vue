@@ -1,20 +1,27 @@
 <script setup>
   import LogoComponent from '@/components/LogoComponent.vue';
 
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import axios from 'axios';
   import * as bootstrap from 'bootstrap';
 
-  const menuData = ref([]);
+  const categories = ref([]);
   const api = import.meta.env.VITE_API_URL;
 
+// 篩選有效的主類別：只顯示 is_enabled === 1 的類別
+  const menuData = computed(() => {
+    return categories.value.filter((item) => item.is_enabled === 1);
+  });
+
   onMounted (async () => {
-      try {
-          const { data: categories } = await axios.get(`${api}/categories/all`);
-          menuData.value = Object.values(categories.data);
-      } catch (error) {
-          console.error('API 請求失敗:', error);
+    try {
+      const response = await axios.get(`${api}/categories/all`);
+      if (response.data && response.data.data) {
+        categories.value = Object.values(response.data.data);
       }
+    } catch (error) {
+      console.error('API 請求失敗:', error);
+    }
   })
   //關閉手機版選單
   const closeOffcanvas = () => {

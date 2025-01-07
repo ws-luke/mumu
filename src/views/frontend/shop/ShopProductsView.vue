@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -7,7 +7,7 @@ import axios from 'axios'
 const route = useRoute()
 const category = ref('')
 const subcategory = ref('')
-const menuData = ref([]) // 儲存分類資料
+const categories = ref([]) // 儲存分類資料
 const api = import.meta.env.VITE_API_URL // API URL
 const productData = ref([]) // 儲存商品資料
 const pagination = ref({}) // 儲存分頁資料
@@ -29,14 +29,20 @@ const fetchProducts = async (page, category, subcategory) => {
     console.error('取得商品資料失敗:', error);
   }
 }
+// 篩選有效的主類別：只顯示 is_enabled === 1 的類別
+const menuData = computed(() => {
+  return categories.value.filter((item) => item.is_enabled === 1);
+});
 
 // 方法：取得分類資料
 const fetchCategories = async () => {
   try {
-    const { data: categories } = await axios.get(`${api}/categories/all`);
-    menuData.value = Object.values(categories.data);
+    const response = await axios.get(`${api}/categories/all`);
+    if (response.data && response.data.data) {
+      categories.value = Object.values(response.data.data);
+    }
   } catch (error) {
-    console.error('取得分類資料失敗:', error);
+    console.error('API 請求失敗:', error);
   }
 }
 
@@ -149,7 +155,7 @@ watch(
         <section class="col-lg-9 col-xl-10 col-md-12">
           <div class="row justify-content-between mb-4">
             <h4 class="col">{{ category ? category : '所有商品' }}</h4>
-            <div class="col-2">
+            <!-- <div class="col-2">
               <select class="form-select select-sort">
                 <option selected>商品排序</option>
                 <option value="newest">上架時間: 由新到舊</option>
@@ -157,7 +163,7 @@ watch(
                 <option value="highPrice">價格: 由高至低</option>
                 <option value="lowPrice">價格: 由低至高</option>
               </select>
-            </div>
+            </div> -->
           </div>
           <div v-if="productData.length > 0" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-4">
             <div  class="col" v-for="product in productData" :key="product.id">
@@ -171,12 +177,14 @@ watch(
                 >
                   <span class="placeholder w-100 h-100"></span>
                 </div>
-                <img
-                  :src="product.imageUrl"
-                  class="card-img-top img-fluid"
-                  :alt="product.title"
-                  @load="onImageLoad(product.id)"
-                />
+                <div class="card-img-top overflow-hidden">
+                  <img
+                    :src="product.imageUrl"
+                    class=" img-fluid"
+                    :alt="product.title"
+                    @load="onImageLoad(product.id)"
+                  />
+                </div>
                 <div class="card-body">
                   <p class="card-title text-center">{{ product.title }}</p>
                   <p class="text-center price mb-0 fw-bold">

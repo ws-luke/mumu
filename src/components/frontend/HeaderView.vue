@@ -1,19 +1,30 @@
 <script setup>
-  import LogoComponent from '@/components/LogoComponent.vue'
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
+import LogoComponent from '@/components/LogoComponent.vue';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 
-  const api = import.meta.env.VITE_API_URL
-  const menuData = ref([]);
+// 環境變數
+const api = import.meta.env.VITE_API_URL;
 
-  onMounted (async () => {
-      try {
-          const { data: categories } = await axios.get(`${api}/categories/all`);
-          menuData.value = Object.values(categories.data);
-      } catch (error) {
-          console.error('API 請求失敗:', error);
-      }
-  })
+// 類別資料
+const categories = ref([]);
+
+// 篩選有效的主類別：只顯示 is_enabled === 1 的類別
+const menuData = computed(() => {
+  return categories.value.filter((item) => item.is_enabled === 1);
+});
+
+// 在組件掛載時獲取資料
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${api}/categories/all`);
+    if (response.data && response.data.data) {
+      categories.value = Object.values(response.data.data);
+    }
+  } catch (error) {
+    console.error('API 請求失敗:', error);
+  }
+});
 </script>
 <template>
   <div>
@@ -30,7 +41,7 @@
             <li class="nav-item">
               <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">所有商品</router-link>
             </li>
-            <li v-for="item in menuData" :key="item.id" class="nav-item">
+            <li v-for="item in menuData" :key="item.id" class="nav-item" >
                 <router-link :to="{ name: 'shop-products', query: { category: item.name }}" class="nav-link">{{ item.name }}</router-link>
             </li>
           </ul>

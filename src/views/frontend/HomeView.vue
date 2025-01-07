@@ -65,74 +65,25 @@ onMounted(async () => {
         class="carousel slide"
         data-bs-ride="carousel"
       >
-        <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
-        </div>
         <div class="carousel-inner">
           <div class="carousel-item active">
+            <a href="shop/shop-product/-OEySYm86pLYtZcaT9PK">
+              <img
+              src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/9dbaa990-2e9b-4761-b43f-91e0d1d38912.png"
+              class="d-none d-lg-block w-100"
+              alt="真空磁吸手機支架"/>
             <img
-              src="https://img2.momoshop.com.tw/ecm/img/online/19/011/00/000/bt_2_095_02/bt_2_095_02_e8.jpg?t=1727349419527"
-              class="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div class="carousel-item">
-            <img
-              src="https://img2.momoshop.com.tw/ecm/img/online/19/011/00/000/bt_2_095_02/bt_2_095_02_e10.jpg?t=1728383120485"
-              class="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div class="carousel-item">
-            <img
-              src="https://img2.momoshop.com.tw/ecm/img/online/19/011/00/000/bt_2_095_02/bt_2_095_02_e12.jpg?t=1727492564082"
-              class="d-block w-100"
-              alt="..."
-            />
+              src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/a8ea680e-396c-409e-b627-413bf21f4f04.png"
+              class="d-block d-lg-none w-100"
+              alt="真空磁吸手機支架"/>
+            </a>
           </div>
         </div>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
       </div>
     </section>
     <div class="container mb-5" v-for="(products, category) in categorizedProducts" :key="category">
     <div class="d-flex align-items-center justify-content-between mb-3">
-      <h2 class="fw-bold text-center">{{ category }}</h2>
+      <h2 class="fw-bold text-center categoryTitle">{{ category }}</h2>
       <router-link 
       :to="{
         name: 'shop-products',
@@ -147,11 +98,13 @@ onMounted(async () => {
           <router-link
             :to="`/shop/shop-product/${product.id}`"
             class="card h-100 text-decoration-none">
-            <img
-              :src="product.imageUrl"
-              class="card-img-top"
-              :alt="product.title"
-            />
+            <div class="card-img-top overflow-hidden">
+              <img
+                :src="product.imageUrl"
+                class="img-fluid"
+                :alt="product.title"
+              />
+            </div>
             <div class="card-body">
               <p class="card-title text-center">{{ product.title }}</p>
               <p class="text-center price mb-0 fw-bold">
@@ -165,6 +118,9 @@ onMounted(async () => {
   </div>
 </template>
 <style scoped>
+.categoryTitle{
+  color: #474747;
+}
 .price {
   color: #1c7637;
 }

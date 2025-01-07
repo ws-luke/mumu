@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="container">© 2024 MUMU</div>
+    <div class="container text-center">© 2025 MUMU</div>
   </footer>
 </template>
 <style scoped>

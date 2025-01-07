@@ -258,4 +258,9 @@ body {
   height: 100%;
   object-fit: cover;
 }
+td:first-child {
+    width: 80px;
+    white-space: nowrap;
+  }
+.table > :not(caption) > * > *{padding: .5rem;}
 </style>
