@@ -67,7 +67,7 @@ onMounted(async () => {
       >
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <a href="shop/shop-product/-OEySYm86pLYtZcaT9PK">
+            <router-link :to="`shop/shop-product/-OEySYm86pLYtZcaT9PK`">
               <img
               src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/9dbaa990-2e9b-4761-b43f-91e0d1d38912.png"
               class="d-none d-lg-block w-100"
@@ -76,7 +76,7 @@ onMounted(async () => {
               src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/a8ea680e-396c-409e-b627-413bf21f4f04.png"
               class="d-block d-lg-none w-100"
               alt="真空磁吸手機支架"/>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ onMounted(async () => {
     <div class="container mb-5" v-for="(products, category) in categorizedProducts" :key="category">
     <div class="d-flex align-items-center justify-content-between mb-3">
       <h2 class="fw-bold text-center categoryTitle">{{ category }}</h2>
-      <router-link 
+      <router-link
       :to="{
         name: 'shop-products',
         query: {
