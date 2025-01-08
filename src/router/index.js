@@ -172,9 +172,9 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    next('/');
+    next('/admin/signin');
   } else {
-    next(); // 不需要驗證的路徑直接通過
+    next();
   }
 });
 export default router
