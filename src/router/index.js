@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// import { auth } from './firebase'; // Firebase 初始化
 import HomeView from '@/views/frontend/HomeView.vue'
 
 const router = createRouter({
@@ -146,6 +147,7 @@ const router = createRouter({
           component: () => import('@/views/admin/DashboardView.vue'),
         },
       ],
+      meta: { requiresAuth: true },
     },
     {
       path: '/admin/signup', // 註冊
@@ -168,5 +170,11 @@ const router = createRouter({
     }
   },
 })
-
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    next('/');
+  } else {
+    next(); // 不需要驗證的路徑直接通過
+  }
+});
 export default router
