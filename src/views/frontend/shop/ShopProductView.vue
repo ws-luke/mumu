@@ -93,7 +93,7 @@ watch(
         </ol>
       </nav>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
           <swiper
             :style="{
               '--swiper-navigation-color': '#fff',

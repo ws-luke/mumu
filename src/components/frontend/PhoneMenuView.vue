@@ -1,28 +1,19 @@
 <script setup>
-  import LogoComponent from '@/components/LogoComponent.vue';
 
-  import { ref, onMounted, computed } from 'vue';
-  import axios from 'axios';
+  import { onMounted } from 'vue';
+  import LogoComponent from '@/components/LogoComponent.vue';
+  import { useCategoriesStore } from '@/stores/categories';
   import * as bootstrap from 'bootstrap';
 
-  const categories = ref([]);
-  const api = import.meta.env.VITE_API_URL;
+  // 初始化分類 Store
+  const categoriesStore = useCategoriesStore();
+  const { fetchCategories, enabledMenuData } = categoriesStore;
 
-// 篩選有效的主類別：只顯示 is_enabled === 1 的類別
-  const menuData = computed(() => {
-    return categories.value.filter((item) => item.is_enabled === 1);
+  onMounted( async () => {
+    await fetchCategories(); // 確保分類資料在頁面載入時獲取
   });
 
-  onMounted (async () => {
-    try {
-      const response = await axios.get(`${api}/categories/all`);
-      if (response.data && response.data.data) {
-        categories.value = Object.values(response.data.data);
-      }
-    } catch (error) {
-      console.error('API 請求失敗:', error);
-    }
-  })
+
   //關閉手機版選單
   const closeOffcanvas = () => {
     const offcanvas = document.getElementById('offcanvasRight');
@@ -51,13 +42,16 @@
     <div class="offcanvas-body">
       <div class="accordion" id="accordionPhoneMenuPage">
         <h2 class="accordion-header border-bottom">
-            <button
-              class="accordion-button px-0 collapsed allProduct"
-            >
-              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link" @click="closeOffcanvas">所有商品</router-link>
-            </button>
-          </h2>
-        <div v-for="item in menuData" :key="item.id" class="accordion-item border-0">
+          <button class="accordion-button px-0 collapsed allProduct">
+            <router-link :to="{name: 'collaboration'}" class="nav-link" @click="closeOffcanvas">批發、採購合作</router-link>
+          </button>
+        </h2>
+        <h2 class="accordion-header border-bottom">
+          <button class="accordion-button px-0 collapsed allProduct">
+            <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link" @click="closeOffcanvas">所有商品</router-link>
+          </button>
+        </h2>
+        <div v-for="item in enabledMenuData" :key="item.id" class="accordion-item border-0">
           <h2 class="accordion-header border-bottom" :id="`productList${item.id}`">
             <button
               class="accordion-button px-0 collapsed"

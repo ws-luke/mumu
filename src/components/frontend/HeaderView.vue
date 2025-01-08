@@ -1,38 +1,21 @@
 <script setup>
+import { onMounted } from 'vue';
 import LogoComponent from '@/components/LogoComponent.vue';
-import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+import { useCategoriesStore } from '@/stores/categories';
 
-// 環境變數
-const api = import.meta.env.VITE_API_URL;
+// 初始化分類 Store
+const categoriesStore = useCategoriesStore();
+const { fetchCategories, enabledMenuData } = categoriesStore;
 
-// 類別資料
-const categories = ref([]);
-
-// 篩選有效的主類別：只顯示 is_enabled === 1 的類別
-const menuData = computed(() => {
-  return categories.value.filter((item) => item.is_enabled === 1);
-});
-
-// 在組件掛載時獲取資料
-onMounted(async () => {
-  try {
-    const response = await axios.get(`${api}/categories/all`);
-    if (response.data && response.data.data) {
-      categories.value = Object.values(response.data.data);
-    }
-  } catch (error) {
-    console.error('API 請求失敗:', error);
-  }
+onMounted( async () => {
+  await fetchCategories(); // 確保分類資料在頁面載入時獲取
 });
 </script>
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <router-link to="/" class="navbar-brand m-0"
-          ><LogoComponent></LogoComponent
-        ></router-link>
+        <router-link to="/" class="navbar-brand m-0"><LogoComponent></LogoComponent></router-link>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -41,7 +24,7 @@ onMounted(async () => {
             <li class="nav-item">
               <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">所有商品</router-link>
             </li>
-            <li v-for="item in menuData" :key="item.id" class="nav-item" >
+            <li v-for="item in enabledMenuData" :key="item.id" class="nav-item" >
                 <router-link :to="{ name: 'shop-products', query: { category: item.name }}" class="nav-link">{{ item.name }}</router-link>
             </li>
           </ul>

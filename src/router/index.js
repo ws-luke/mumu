@@ -158,6 +158,15 @@ const router = createRouter({
       component: () => import('@/views/admin/SignInView.vue'),
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      // 如果有儲存的滾動位置（如瀏覽器的前進/後退），則滾動到該位置
+      return savedPosition;
+    } else {
+      // 預設回到頂部
+      return { top: 0 };
+    }
+  },
 })
 
 export default router
