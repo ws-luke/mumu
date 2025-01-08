@@ -5,7 +5,7 @@ import { useCategoriesStore } from '@/stores/categories';
 
 // 初始化分類 Store
 const categoriesStore = useCategoriesStore();
-const { fetchCategories, enabledMenuData } = categoriesStore;
+const { fetchCategories, menuData } = categoriesStore;
 
 onMounted( async () => {
   await fetchCategories(); // 確保分類資料在頁面載入時獲取
@@ -24,7 +24,7 @@ onMounted( async () => {
             <li class="nav-item">
               <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">所有商品</router-link>
             </li>
-            <li v-for="item in enabledMenuData" :key="item.id" class="nav-item" >
+            <li v-for="item in menuData" :key="item.id" class="nav-item" >
                 <router-link :to="{ name: 'shop-products', query: { category: item.name }}" class="nav-link">{{ item.name }}</router-link>
             </li>
           </ul>
