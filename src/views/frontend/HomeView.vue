@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import { useProductsStore } from '@/stores/products';
 const route = useRoute();
 const productsStore = useProductsStore();
-const { fetchProducts,categorizedProducts } = productsStore;
+const { fetchProducts, categorizedProducts } = productsStore;
 
 onMounted(async () => {
   try {
