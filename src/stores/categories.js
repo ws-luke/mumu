@@ -18,5 +18,4 @@ export const useCategoriesStore = defineStore('categories', {
       }
     },
   },
-  persist: true, // 啟用持久化
 });

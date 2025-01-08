@@ -1,18 +1,19 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, toRefs } from 'vue';
 import LogoComponent from '@/components/LogoComponent.vue';
 import { useCategoriesStore } from '@/stores/categories';
 
 // 初始化分類 Store
 const categoriesStore = useCategoriesStore();
-const { fetchCategories, menuData } = categoriesStore;
-
+const { fetchCategories } = categoriesStore;
+const { menuData } = toRefs(categoriesStore); // 保留 menuData 的響應式特性
 onMounted( async () => {
   await fetchCategories(); // 確保分類資料在頁面載入時獲取
 });
 </script>
 <template>
   <div>
+  {{ menuData }}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <router-link to="/" class="navbar-brand m-0"><LogoComponent></LogoComponent></router-link>

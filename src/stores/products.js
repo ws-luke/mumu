@@ -26,5 +26,4 @@ export const useProductsStore = defineStore('products', {
       }
     },
   },
-  persist: true, // 啟用持久化
 });
