@@ -1,13 +1,14 @@
 <script setup>
 
-  import { onMounted } from 'vue';
+  import { onMounted, toRefs } from 'vue';
   import LogoComponent from '@/components/LogoComponent.vue';
   import { useCategoriesStore } from '@/stores/categories';
   import * as bootstrap from 'bootstrap';
 
   // 初始化分類 Store
   const categoriesStore = useCategoriesStore();
-  const { fetchCategories, enabledMenuData } = categoriesStore;
+  const { fetchCategories } = categoriesStore;
+  const { menuData } = toRefs(categoriesStore); // 保留 menuData 的響應式特性
 
   onMounted( async () => {
     await fetchCategories(); // 確保分類資料在頁面載入時獲取
@@ -51,7 +52,7 @@
             <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link" @click="closeOffcanvas">所有商品</router-link>
           </button>
         </h2>
-        <div v-for="item in enabledMenuData" :key="item.id" class="accordion-item border-0">
+        <div v-for="item in menuData" :key="item.id" class="accordion-item border-0">
           <h2 class="accordion-header border-bottom" :id="`productList${item.id}`">
             <button
               class="accordion-button px-0 collapsed"
