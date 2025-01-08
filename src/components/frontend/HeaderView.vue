@@ -13,7 +13,6 @@ onMounted( async () => {
 </script>
 <template>
   <div>
-  {{ menuData }}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <router-link to="/" class="navbar-brand m-0"><LogoComponent></LogoComponent></router-link>
