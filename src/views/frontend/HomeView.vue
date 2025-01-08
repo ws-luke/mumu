@@ -1,20 +1,15 @@
 <script setup>
-import { onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, toRefs } from 'vue';
 import { useProductsStore } from '@/stores/products';
-const route = useRoute();
 const productsStore = useProductsStore();
-const { fetchProducts, categorizedProducts } = productsStore;
-
+const { fetchProducts } = productsStore;
+const { categorizedProducts } = toRefs(productsStore);
 onMounted(async () => {
   try {
     await fetchProducts(); // 確保資料載入    
   } catch (error) {
     console.error('載入商品資料失敗:', error);
   }
-});
-watch(() => route.name, async () => {
-  await fetchProducts();
 });
 </script>
 

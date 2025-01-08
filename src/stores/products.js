@@ -12,7 +12,9 @@ export const useProductsStore = defineStore('products', {
       const apiStore = useApiStore();
       try {
         const data = await apiStore.fetchData(API_ROUTES.PRODUCTS);
-        this.productsData = Object.values(data.data.products);        
+        this.productsData = Object.values(data.data.products);
+        
+        this.categorizedProducts = {};
         // 按分類整理商品
         this.productsData.forEach(product => {
           const category = product.category;
