@@ -88,77 +88,6 @@ const router = createRouter({
       name: 'shop-checkout',
       component: () => import('@/views/frontend/shop/ShopCheckoutView.vue'),
     },
-    //後台
-    {
-      path: '/admin',
-      name: 'admin',
-      component: () => import('@/views/admin/LayoutView.vue'),
-      children: [
-        {
-          path: '/admin/dashboard', // 儀錶版
-          name: 'dashboard',
-          component: () => import('@/views/admin/DashboardView.vue'),
-        },
-        {
-          path: '/admin/categories', // 產品類別
-          name: 'categories',
-          component: () =>
-            import('@/views/admin/categories/CategoriesView.vue'),
-        },
-        {
-          path: '/admin/products', // 產品列表
-          name: 'products',
-          component: () => import('@/views/admin/products/ProductsView.vue'),
-        },
-        {
-          path: '/admin/product/:id?', // 新增產品 + 編輯產品
-          name: 'product-form',
-          component: () => import('@/views/admin/products/ProductView.vue'),
-          props: true, // 自動將路由參數傳給組件
-        },
-        {
-          path: '/admin/upload', // 上傳檔案
-          name: 'upload',
-          component: () => import('@/views/admin/uploadView.vue'),
-        },
-        {
-          path: '/admin/orders', // 訂單列表
-          name: 'orders',
-          component: () => import('@/views/admin/orders/OrdersView.vue'),
-        },
-        {
-          path: '/admin/order', // 訂單
-          name: 'order',
-          component: () => import('@/views/admin/orders/OrderView.vue'),
-        },
-        {
-          path: '/admin/customers', // 會員
-          name: 'customers',
-          component: () => import('@/views/admin/customers/CustomersView.vue'),
-        },
-        {
-          path: '/admin/customer', // 會員
-          name: 'customer',
-          component: () => import('@/views/admin/customers/CustomerView.vue'),
-        },
-        {
-          path: '/admin/dashboard', // 管理者
-          name: 'dashboard',
-          component: () => import('@/views/admin/DashboardView.vue'),
-        },
-      ],
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/admin/signup', // 註冊
-      name: 'adminSignup',
-      component: () => import('@/views/admin/SignUpView.vue'),
-    },
-    {
-      path: '/admin/signin', // 登入
-      name: 'adminSignin',
-      component: () => import('@/views/admin/SignInView.vue'),
-    },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -170,11 +99,4 @@ const router = createRouter({
     }
   },
 })
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
-    next('/admin/signin');
-  } else {
-    next();
-  }
-});
 export default router
