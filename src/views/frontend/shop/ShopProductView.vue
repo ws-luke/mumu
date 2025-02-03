@@ -157,15 +157,16 @@ watch(
               >{{ product.subcategory }}</router-link
             >
           </p>
-
           <h1>{{ product.title }}</h1>
           <p class="text-muted">{{ currentModel }}</p>
           <div class="fs-4">
             <span class="fw-bold fs-3 text-danger">$ {{product.retail_Price}}</span>
           </div>
           <hr class="my-4" />
+          <div v-html="product.description"></div>
+          <hr class="my-4" />
           <p>顏色</p>
-          <button v-for="item in productVariants" :key="item" class="btn btn-outline-dark me-2" @click="changeProductModel(item)">{{ item.color }}</button>
+          <button v-for="item in productVariants" :key="item" class="btn btn-outline-dark me-2 mb-2" @click="changeProductModel(item)">{{ item.color }}</button>
           <hr class="my-4" />
           <div>
             <table class="table table-borderless mb-0">
