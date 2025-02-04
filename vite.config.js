@@ -12,11 +12,13 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: 'MUMU',
-        short_name: 'PWA',
+        short_name: 'MUMU',
         description: '3C配件批發網站',
         theme_color: '#e3e8db',
         background_color: '#455c35',
-        display: 'standalone',
+        display: 'fullscreen',
+        start_url: "/",
+        id: "/",
         icons: [
           {
             src: '/app-icon/196.png',
