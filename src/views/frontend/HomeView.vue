@@ -1,6 +1,11 @@
 <script setup>
 import { onMounted, toRefs } from 'vue';
 import { useProductsStore } from '@/stores/products';
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/pagination';
+import { Autoplay, Pagination } from 'swiper/modules'
+const modules = [Autoplay, Pagination]
 const productsStore = useProductsStore();
 const { fetchProducts } = productsStore;
 const { categorizedProducts } = toRefs(productsStore);
@@ -16,15 +21,20 @@ onMounted(async () => {
 <template>
   <div>
     <!-- 輪播圖 -->
-    <section class="mb-5">
-      <div
-        id="carouselExampleIndicators"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <router-link :to="`shop/shop-product/-OEySYm86pLYtZcaT9PK`">
+    <swiper
+      :autoplay="{
+        delay: 4000,
+        disableOnInteraction: false,
+      }"
+      :pagination="{
+        clickable: true,
+      }"
+      :loop="true"
+      :modules="modules"
+      class="homeSwiper mb-5"
+    >
+      <swiper-slide>
+        <router-link :to="`shop/shop-product/-OEySYm86pLYtZcaT9PK`">
               <img
               src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/9dbaa990-2e9b-4761-b43f-91e0d1d38912.png"
               class="d-none d-lg-block w-100"
@@ -34,10 +44,20 @@ onMounted(async () => {
               class="d-block d-lg-none w-100"
               alt="真空磁吸手機支架"/>
             </router-link>
-          </div>
-        </div>
-      </div>
-    </section>
+      </swiper-slide>
+      <swiper-slide>
+        <router-link :to="`/shop/shop-product/-OH8FQuu9psaf6Pf_Fjv`">
+              <img
+              src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/11c76073-6617-46b0-bb59-08b341910635.webp"
+              class="d-none d-lg-block w-100"
+              alt="65W 氮化鎵充電器"/>
+            <img
+              src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/588952ac-454b-432f-a355-5729400fb964.webp"
+              class="d-block d-lg-none w-100"
+              alt="65W 氮化鎵充電器"/>
+            </router-link>
+      </swiper-slide>
+    </swiper>
     <div class="container mb-5" v-for="(products, category) in categorizedProducts" :key="category">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold text-center categoryTitle">{{ category }}</h2>

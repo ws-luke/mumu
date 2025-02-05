@@ -38,3 +38,6 @@ a:hover .card-img-top img{
   transform: scale(1.1);
   transition: ease-in-out .3s;
 }
+.swiper-pagination-bullet-active {
+  background: #1c7637 !important;
+}
