@@ -2,6 +2,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { useWholesaleStore } from '@/stores/wholesale';
 
 // 獲取路由資訊
 const route = useRoute()
@@ -66,6 +67,10 @@ onMounted(async () => {
   await fetchCategories();
   await fetchProducts(1, category.value, subcategory.value);
 })
+
+// 顯示批發價
+defineProps(['product']);
+const wholesaleStore = useWholesaleStore();
 
 // 監聽路由參數變化
 watch(
@@ -188,7 +193,8 @@ watch(
                 <div class="card-body">
                   <p class="card-title text-center">{{ product.title }}</p>
                   <p class="text-center price mb-0 fw-bold">
-                    NT$ {{ product.retail_Price }}
+                    <span v-if="wholesaleStore.isWholesale">NT$ {{ product.price }}</span>
+                    <span v-else>NT$ {{ product.retail_Price }}</span>
                   </p>
                 </div>
               </router-link>

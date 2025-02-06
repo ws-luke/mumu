@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="container text-center">© 2025 MUMU-3C配件批發網</div>
+    <div class="container text-center">© 2025 MUMU 3C配件批發網</div>
   </footer>
 </template>
 <style scoped>

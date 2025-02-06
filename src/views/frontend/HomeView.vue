@@ -5,10 +5,14 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/pagination';
 import { Autoplay, Pagination } from 'swiper/modules'
+import { useWholesaleStore } from '@/stores/wholesale';
 const modules = [Autoplay, Pagination]
 const productsStore = useProductsStore();
 const { fetchProducts } = productsStore;
 const { categorizedProducts } = toRefs(productsStore);
+// 顯示批發價
+defineProps(['product']);
+const wholesaleStore = useWholesaleStore();
 onMounted(async () => {
   try {
     await fetchProducts(); // 確保資料載入    
@@ -16,6 +20,7 @@ onMounted(async () => {
     console.error('載入商品資料失敗:', error);
   }
 });
+
 </script>
 
 <template>
@@ -85,7 +90,8 @@ onMounted(async () => {
               <div class="card-body">
                 <p class="card-title text-center">{{ product.title }}</p>
                 <p class="text-center price mb-0 fw-bold">
-                  NT$ {{ product.retail_Price }}
+                  <span v-if="wholesaleStore.isWholesale">NT$ {{ product.price }}</span>
+                  <span v-else>NT$ {{ product.retail_Price }}</span>
                 </p>
               </div>
             </router-link>
