@@ -90,8 +90,10 @@ onMounted(async () => {
               <div class="card-body">
                 <p class="card-title text-center">{{ product.title }}</p>
                 <p class="text-center price mb-0 fw-bold">
-                  <span v-if="wholesaleStore.isWholesale">NT$ {{ product.price }}</span>
-                  <span v-else>NT$ {{ product.retail_Price }}</span>
+                  <span>建議售價：{{ product.retail_Price }}元</span>
+                </p>
+                <p v-if="wholesaleStore.isWholesale" class="text-center text-danger mb-0 fw-bold">
+                  <span>批發價：{{ product.price }}元</span>
                 </p>
               </div>
             </router-link>
