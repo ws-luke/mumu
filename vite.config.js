@@ -1,12 +1,42 @@
 import { fileURLToPath, URL } from 'node:url'
-
+import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'MUMU',
+        short_name: 'MUMU',
+        description: '3C配件批發網站',
+        theme_color: '#e3e8db',
+        background_color: '#455c35',
+        display: 'fullscreen',
+        start_url: "/",
+        id: "/",
+        icons: [
+          {
+            src: '/app-icon/196.png',
+            sizes: '196x196',
+            type: 'image/png'
+          },
+          {
+            src: '/p512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,jpg,svg}']
+      }
+    })
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

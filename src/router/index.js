@@ -99,4 +99,12 @@ const router = createRouter({
     }
   },
 })
+router.beforeEach((to, from, next) => {
+  const wholesale = from.query.wholesale;
+  if (wholesale && !to.query.wholesale) {
+    next({ path: to.path, query: { ...to.query, wholesale } });
+  } else {
+    next();
+  }
+});
 export default router
