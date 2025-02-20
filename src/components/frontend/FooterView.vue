@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="container text-center">© 2025 MUMU</div>
+    <div class="container text-center">© 2025 MUMU 鼎沐科技股份有限公司</div>
   </footer>
 </template>
 <style scoped>
