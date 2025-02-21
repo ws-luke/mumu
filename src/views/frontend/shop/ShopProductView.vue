@@ -166,8 +166,11 @@ watch(
           <p class="text-muted">{{ currentModel }}</p>
           <div class="fs-4">
           <p>
-            <span class="fw-bold">建議售價：{{product.retail_Price}}元</span>
-            </p>
+            <span class="fw-bold text-success">建議售價：{{product.retail_Price}}元</span>
+          </p>
+          <p>
+            <span v-if="wholesaleStore.isWholesale" class="fw-bold">最低建議售價：{{ product.origin_price }}元</span>
+          </p>
           <p>
             <span v-if="wholesaleStore.isWholesale" class="fw-bold text-danger">批發價：{{ product.price }}元</span>
           </p>

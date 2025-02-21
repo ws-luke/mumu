@@ -89,8 +89,11 @@ onMounted(async () => {
               </div>
               <div class="card-body">
                 <p class="card-title text-center">{{ product.title }}</p>
-                <p class="text-center price mb-0 fw-bold">
+                <p class="text-center price mb-0 fw-bold text-success">
                   <span>建議售價：{{ product.retail_Price }}元</span>
+                </p>
+                <p class="text-center price mb-0 fw-bold">
+                  <span>最低建議售價：{{ product.origin_price }}元</span>
                 </p>
                 <p v-if="wholesaleStore.isWholesale" class="text-center text-danger mb-0 fw-bold">
                   <span>批發價：{{ product.price }}元</span>
@@ -105,8 +108,5 @@ onMounted(async () => {
 <style scoped>
   .categoryTitle{
     color: #474747;
-  }
-  .price {
-    color: #1c7637;
   }
 </style>
