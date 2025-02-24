@@ -39,18 +39,6 @@ onMounted(async () => {
       class="homeSwiper mb-5"
     >
       <swiper-slide>
-        <router-link :to="`shop/shop-product/-OEySYm86pLYtZcaT9PK`">
-              <img
-              src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/9dbaa990-2e9b-4761-b43f-91e0d1d38912.png"
-              class="d-none d-lg-block w-100"
-              alt="真空磁吸手機支架"/>
-            <img
-              src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/a8ea680e-396c-409e-b627-413bf21f4f04.png"
-              class="d-block d-lg-none w-100"
-              alt="真空磁吸手機支架"/>
-            </router-link>
-      </swiper-slide>
-      <swiper-slide>
         <router-link :to="`/shop/shop-product/-OH8FQuu9psaf6Pf_Fjv`">
               <img
               src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/11c76073-6617-46b0-bb59-08b341910635.webp"
@@ -92,9 +80,9 @@ onMounted(async () => {
                 <p class="text-center price mb-0 fw-bold text-success">
                   <span>建議售價：{{ product.retail_Price }}元</span>
                 </p>
-                <p class="text-center price mb-0 fw-bold">
+                <!-- <p class="text-center price mb-0 fw-bold">
                   <span>最低建議售價：{{ product.origin_price }}元</span>
-                </p>
+                </p> -->
                 <p v-if="wholesaleStore.isWholesale" class="text-center text-danger mb-0 fw-bold">
                   <span>批發價：{{ product.price }}元</span>
                 </p>
