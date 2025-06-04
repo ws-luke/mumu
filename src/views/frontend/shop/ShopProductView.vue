@@ -14,7 +14,7 @@ const thumbsSwiper = ref(null)
 const api = import.meta.env.VITE_API_URL // API URL
 const { id } = useRoute().params
 const route = useRoute()
-const product = ref({}) // 商品資訊
+const productData = ref({}) // 商品資訊
 const productVariants = ref()
 const loadedImages = ref({}) // 用於追蹤每個圖片是否載入完成
 const modules = [FreeMode, Navigation, Thumbs]
@@ -29,7 +29,7 @@ const currentQuantity = ref(null) // 當前數量
 const getProduct = async () => {
   try {
     const { data } = await axios.get(`${api}/products/${id}`)
-    product.value = data.data
+    productData.value = data.data
     productVariants.value = data.data.productVariants
     currentModel.value = productVariants.value[0].model
   } catch (error) {
@@ -87,13 +87,13 @@ watch(
           </li>
           <li class="breadcrumb-item">
             <router-link
-              :to="`/shop/shop-products?category=${product.category}`"
+              :to="`/shop/shop-products?category=${productData.category}`"
               class="text-decoration-none"
-              >{{ product.category }}</router-link
+              >{{ productData.category }}</router-link
             >
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            {{ product.title }}
+            {{ productData.title }}
           </li>
         </ol>
       </nav>
@@ -106,19 +106,18 @@ watch(
             }"
             :loop="true"
             :spaceBetween="10"
-            :navigation="true"
             :thumbs="{ swiper: thumbsSwiper }"
             :modules="modules"
             class="mySwiper2 mb-3"
           >
-            <swiper-slide v-for="url in product.imagesUrl" :key="url">
+            <swiper-slide v-for="url in productData.imagesUrl" :key="url">
               <div
-                v-if="!loadedImages[product.id]"
+                v-if="!loadedImages[productData.id]"
                 class="bg-light placeholder-glow"
               >
                 <span class="placeholder w-100 h-100"></span>
               </div>
-              <img @load="onImageLoad(product.id)" :src="url" />
+              <img @load="onImageLoad(productData.id)" :src="url" />
             </swiper-slide>
           </swiper>
           <swiper
@@ -131,52 +130,52 @@ watch(
             :modules="modules"
             class="mySwiper"
           >
-            <swiper-slide v-for="url in product.imagesUrl" :key="url">
+            <swiper-slide v-for="url in productData.imagesUrl" :key="url">
               <div
-                v-if="!loadedImages[product.id]"
+                v-if="!loadedImages[productData.id]"
                 class="bg-light placeholder-glow"
               >
                 <span class="placeholder w-100 h-100"></span>
               </div>
-              <img @load="onImageLoad(product.id)" :src="url" />
+              <img @load="onImageLoad(productData.id)" :src="url" />
             </swiper-slide>
           </swiper>
         </div>
         <div class="col-md-6">
           <p class="d-flex">
             <router-link
-              :to="`/shop/shop-products?category=${product.category}`"
+              :to="`/shop/shop-products?category=${productData.category}`"
               class="mb-2 d-block text-decoration-none"
-              >{{ product.category }}</router-link
+              >{{ productData.category }}</router-link
             >
             <span class="mx-2">/</span>
             <router-link
               :to="{
                 name: 'shop-products',
                 query: {
-                  category: product.category,
-                  subcategory: product.subcategory,
+                  category: productData.category,
+                  subcategory: productData.subcategory,
                 },
               }"
               class="mb-2 d-block text-decoration-none"
-              >{{ product.subcategory }}</router-link
+              >{{ productData.subcategory }}</router-link
             >
           </p>
-          <h1>{{ product.title }}</h1>
+          <h1>{{ productData.title }}</h1>
           <p class="text-muted">{{ currentModel }}</p>
           <div class="fs-4">
           <p>
-            <span class="fw-bold text-success">建議售價：{{product.retail_Price}}元</span>
+            <span class="fw-bold text-success">建議售價：{{productData.retail_Price}}元</span>
           </p>
           <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold">最低建議售價：{{ product.origin_price }}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="fw-bold">最低建議售價：{{ productData.origin_price }}元</span>
           </p>
           <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-danger">批發價：{{ product.price }}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-danger">批發價：{{ productData.price }}元</span>
           </p>
           </div>
           <hr class="my-4" />
-          <div v-html="product.description"></div>
+          <div v-html="productData.description"></div>
           <hr class="my-4" />
           <p>顏色</p>
           <button v-for="item in productVariants" :key="item" class="btn btn-outline-dark me-2 mb-2" @click="changeProductModel(item)">{{ item.color }}</button>
@@ -186,15 +185,15 @@ watch(
               <tbody>
                 <tr>
                   <td>材質:</td>
-                  <td>{{ product.material }}</td>
+                  <td>{{ productData.material }}</td>
                 </tr>
                 <tr>
                   <td>重量:</td>
-                  <td>{{ product.weight }}g</td>
+                  <td>{{ productData.weight }}g</td>
                 </tr>
                 <tr>
                   <td>保固:</td>
-                  <td>{{ product.warranty }}</td>
+                  <td>{{ productData.warranty }}</td>
                 </tr>
               </tbody>
             </table>

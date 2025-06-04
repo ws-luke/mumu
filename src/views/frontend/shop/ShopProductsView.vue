@@ -21,7 +21,7 @@ const fetchProducts = async (page, category, subcategory) => {
     const res = await axios.get(`${api}/products/all`, {
       params: { page, category, subcategory },
     });
-
+    
     // 更新商品資料
     productData.value = res.data.data.products || [];
     pagination.value = res.data.data.pagination;
@@ -170,7 +170,7 @@ watch(
               </select>
             </div> -->
           </div>
-          <div v-if="productData.length > 0" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-4">
+          <div v-if="productData.length > 0" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 g-lg-4 mb-4">
             <div  class="col" v-for="product in productData" :key="product.id">
               <router-link
                 class="card h-100 text-decoration-none"
