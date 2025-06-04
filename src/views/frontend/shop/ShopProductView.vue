@@ -168,10 +168,13 @@ watch(
             <span class="fw-bold text-success">建議售價：{{productData.retail_Price}}元</span>
           </p>
           <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold">最低建議售價：{{ productData.origin_price }}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-muted">最低售價：{{ productData.origin_price }}元</span>
           </p>
           <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-danger">批發價：{{ productData.price }}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="fw-bold">批發價：{{ productData.price }}元</span>
+          </p>
+          <p>
+            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-danger">買斷價：{{ productData.buyout_price }}元</span>
           </p>
           </div>
           <hr class="my-4" />

@@ -195,11 +195,14 @@ watch(
                   <p class="text-center price mb-0 fw-bold text-success">
                     <span>建議售價：{{ product.retail_Price }}元</span>
                   </p>
+                  <p v-if="wholesaleStore.isWholesale" class="text-center text-muted mb-0 fw-bold">
+                    <span>最低售價：{{ product.origin_price }}元</span>
+                  </p>
                   <p v-if="wholesaleStore.isWholesale" class="text-center mb-0 fw-bold">
-                    <span>最低建議售價：{{ product.origin_price }}元</span>
+                    <span>批發價：{{ product.price }}元</span>
                   </p>
                   <p v-if="wholesaleStore.isWholesale" class="text-center text-danger mb-0 fw-bold">
-                    <span>批發價：{{ product.price }}元</span>
+                    <span>買斷價：{{ product.buyout_price }}元</span>
                   </p>
                 </div>
               </router-link>
