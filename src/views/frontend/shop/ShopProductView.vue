@@ -180,7 +180,6 @@ watch(
           <hr class="my-4" />
           <div v-html="productData.description"></div>
           <hr class="my-4" />
-          <p>顏色</p>
           <button v-for="item in productVariants" :key="item" class="btn btn-outline-dark me-2 mb-2" @click="changeProductModel(item)">{{ item.color }}</button>
           <hr class="my-4" />
           <div>
