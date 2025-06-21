@@ -39,8 +39,8 @@ const getProduct = async () => {
 
 // 更換商品型號 價格 數量
 const changeProductModel = (model) => {
-  currentModel.value = model.model
-  currentQuantity.value = model.quantity
+  currentModel.value = model.model;
+  currentQuantity.value = model.quantity;
 }
 // 設定輪播圖片
 const setThumbsSwiper = swiper => {
@@ -164,24 +164,29 @@ watch(
           <h1>{{ productData.title }}</h1>
           <p class="text-muted">{{ currentModel }}</p>
           <div class="fs-4">
-          <p>
-            <span class="fw-bold text-success">建議售價：{{productData.retail_Price}}元</span>
-          </p>
-          <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-muted">最低售價：{{ productData.origin_price }}元</span>
-          </p>
-          <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold">批發價：{{ productData.price }}元</span>
-          </p>
-          <p>
-            <span v-if="wholesaleStore.isWholesale" class="fw-bold text-danger">買斷價：{{ productData.buyout_price }}元</span>
-          </p>
+            <span class="pb-1 d-block fw-bold text-success">建議售價：{{productData.retail_Price}}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold text-muted">最低售價：{{ productData.origin_price }}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold">批發價：{{ productData.price }}元</span>
+            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold text-danger">買斷價：{{ productData.buyout_price }}元</span>
           </div>
-          <hr class="my-4" />
+          <hr class="my-3" />
           <div v-html="productData.description"></div>
-          <hr class="my-4" />
-          <button v-for="item in productVariants" :key="item" class="btn btn-outline-dark me-2 mb-2" @click="changeProductModel(item)">{{ item.color }}</button>
-          <hr class="my-4" />
+          <hr class="my-3" />
+          <button 
+          v-for="item in productVariants" 
+          :key="item.model" 
+          class="btn me-2 mb-2" 
+          :class="{
+            'btn-dark': currentModel === item.model,
+            'btn-outline-dark': currentModel !== item.model
+          }"
+          @click="changeProductModel(item)">{{ item.color }}</button>
+          <p class="fs-5">剩餘庫存量：
+          <span class="fw-bold" v-if="currentQuantity">{{ currentQuantity }} </span>
+          <span v-else></span>
+          {{productData.unit}}
+          </p>
+          <hr class="my-3" />
           <div>
             <table class="table table-borderless mb-0">
               <tbody>
