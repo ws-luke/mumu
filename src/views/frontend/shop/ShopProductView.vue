@@ -8,7 +8,7 @@ import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
-import { useWholesaleStore } from '@/stores/wholesale';
+import { useWholesaleStore } from '@/stores/wholesale'
 // 定義 refs
 const thumbsSwiper = ref(null)
 const api = import.meta.env.VITE_API_URL // API URL
@@ -23,8 +23,6 @@ const subcategory = ref('')
 const currentModel = ref(null) //當前型號
 const currentQuantity = ref(null) // 當前數量
 
-
-
 // 取得商品
 const getProduct = async () => {
   try {
@@ -38,9 +36,9 @@ const getProduct = async () => {
 }
 
 // 更換商品型號 價格 數量
-const changeProductModel = (model) => {
-  currentModel.value = model.model;
-  currentQuantity.value = model.quantity;
+const changeProductModel = model => {
+  currentModel.value = model.model
+  currentQuantity.value = model.quantity
 }
 // 設定輪播圖片
 const setThumbsSwiper = swiper => {
@@ -51,8 +49,8 @@ const onImageLoad = productId => {
   loadedImages.value[productId] = true
 }
 // 顯示批發價
-defineProps(['product']);
-const wholesaleStore = useWholesaleStore();
+defineProps(['product'])
+const wholesaleStore = useWholesaleStore()
 
 onMounted(async () => {
   try {
@@ -164,27 +162,46 @@ watch(
           <h1>{{ productData.title }}</h1>
           <p class="text-muted">{{ currentModel }}</p>
           <div class="fs-4">
-            <span class="pb-1 d-block fw-bold text-success">建議售價：{{productData.retail_Price}}元</span>
-            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold text-muted">最低售價：{{ productData.origin_price }}元</span>
-            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold">批發價：{{ productData.price }}元</span>
-            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold text-danger">買斷價：{{ productData.buyout_price }}元</span>
+            <span class="pb-1 d-block fw-bold text-success"
+              >建議售價：{{ productData.retail_Price }}元</span
+            >
+            <span
+              v-if="wholesaleStore.isWholesale"
+              class="pb-1 d-block fw-bold text-muted"
+              >最低售價：{{ productData.origin_price }}元</span
+            >
+            <span v-if="wholesaleStore.isWholesale" class="pb-1 d-block fw-bold"
+              >寄售價：{{ productData.price }}元</span
+            >
+            <span
+              v-if="wholesaleStore.isWholesale"
+              class="pb-1 d-block fw-bold text-danger"
+              >買斷價：{{ productData.buyout_price }}元</span
+            >
           </div>
           <hr class="my-3" />
           <div v-html="productData.description"></div>
           <hr class="my-3" />
-          <button 
-          v-for="item in productVariants" 
-          :key="item.model" 
-          class="btn me-2 mb-2" 
-          :class="{
-            'btn-dark': currentModel === item.model,
-            'btn-outline-dark': currentModel !== item.model
-          }"
-          @click="changeProductModel(item)">{{ item.color }}</button>
-          <p class="fs-5">剩餘庫存量：
-          <span class="fw-bold" v-if="currentQuantity">{{ currentQuantity }} </span>
-          <span v-else></span>
-          {{productData.unit}}
+          <button
+            v-for="item in productVariants"
+            :key="item.model"
+            class="btn me-2 mb-2"
+            :class="{
+              'btn-dark': currentModel === item.model,
+              'btn-outline-dark': currentModel !== item.model,
+            }"
+            @click="changeProductModel(item)"
+          >
+            {{ item.color }}
+          </button>
+          <p class="fs-5">
+            剩餘庫存量：
+            <span class="fw-bold" v-if="currentQuantity"
+              >{{ currentQuantity }}{{ productData.unit }}
+            </span>
+            <span v-else-if="currentQuantity === 0" class="text-danger"
+              >尚無庫存</span
+            >
           </p>
           <hr class="my-3" />
           <div>
@@ -279,11 +296,13 @@ body {
   object-fit: cover;
 }
 td:first-child {
-    width: 80px;
-    white-space: nowrap;
-  }
-.table > :not(caption) > * > *{padding: .5rem;}
+  width: 80px;
+  white-space: nowrap;
+}
+.table > :not(caption) > * > * {
+  padding: 0.5rem;
+}
 .price {
-  color: #1c7637;
+  color: #264f42;
 }
 </style>

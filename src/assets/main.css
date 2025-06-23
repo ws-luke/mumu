@@ -30,14 +30,14 @@ input[type='number']::-webkit-inner-spin-button {
   width: 3rem;
   height: 3rem;
 }
-.card-img-top img{
+.card-img-top img {
   transform: scale(1);
-  transition: ease-in-out .3s;
+  transition: ease-in-out 0.3s;
 }
-a:hover .card-img-top img{
+a:hover .card-img-top img {
   transform: scale(1.1);
-  transition: ease-in-out .3s;
+  transition: ease-in-out 0.3s;
 }
 .swiper-pagination-bullet-active {
-  background: #1c7637 !important;
+  background: #264f42 !important;
 }

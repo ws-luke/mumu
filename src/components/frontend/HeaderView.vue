@@ -1,31 +1,43 @@
 <script setup>
-import { onMounted, toRefs } from 'vue';
-import LogoComponent from '@/components/LogoComponent.vue';
-import { useCategoriesStore } from '@/stores/categories';
+import { onMounted, toRefs } from 'vue'
+import LogoComponent from '@/components/LogoComponent.vue'
+import { useCategoriesStore } from '@/stores/categories'
 
 // 初始化分類 Store
-const categoriesStore = useCategoriesStore();
-const { fetchCategories } = categoriesStore;
-const { menuData } = toRefs(categoriesStore); // 保留 menuData 的響應式特性
-onMounted( async () => {
-  await fetchCategories(); // 確保分類資料在頁面載入時獲取
-});
+const categoriesStore = useCategoriesStore()
+const { fetchCategories } = categoriesStore
+const { menuData } = toRefs(categoriesStore) // 保留 menuData 的響應式特性
+onMounted(async () => {
+  await fetchCategories() // 確保分類資料在頁面載入時獲取
+})
 </script>
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <router-link to="/" class="navbar-brand m-0"><LogoComponent></LogoComponent></router-link>
+        <router-link to="/" class="navbar-brand m-0"
+          ><LogoComponent></LogoComponent
+        ></router-link>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link :to="{name: 'collaboration'}" class="nav-link">批發、採購合作</router-link>
+              <router-link :to="{ name: 'collaboration' }" class="nav-link"
+                >公司資訊</router-link
+              >
             </li>
             <li class="nav-item">
-              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link">所有商品</router-link>
+              <router-link
+                :to="{ name: 'shop-products', query: { category: '' } }"
+                class="nav-link"
+                >所有商品</router-link
+              >
             </li>
-            <li v-for="item in menuData" :key="item.id" class="nav-item" >
-                <router-link :to="{ name: 'shop-products', query: { category: item.name }}" class="nav-link">{{ item.name }}</router-link>
+            <li v-for="item in menuData" :key="item.id" class="nav-item">
+              <router-link
+                :to="{ name: 'shop-products', query: { category: item.name } }"
+                class="nav-link"
+                >{{ item.name }}</router-link
+              >
             </li>
           </ul>
         </div>

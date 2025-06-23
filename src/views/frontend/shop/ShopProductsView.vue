@@ -2,7 +2,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import { useWholesaleStore } from '@/stores/wholesale';
+import { useWholesaleStore } from '@/stores/wholesale'
 
 // 獲取路由資訊
 const route = useRoute()
@@ -20,57 +20,57 @@ const fetchProducts = async (page, category, subcategory) => {
   try {
     const res = await axios.get(`${api}/products/all`, {
       params: { page, category, subcategory },
-    });
-    
+    })
+
     // 更新商品資料
-    productData.value = res.data.data.products || [];
-    pagination.value = res.data.data.pagination;
-    totalPages.value = pagination.value.totalPages;
+    productData.value = res.data.data.products || []
+    pagination.value = res.data.data.pagination
+    totalPages.value = pagination.value.totalPages
   } catch (error) {
-    console.error('取得商品資料失敗:', error);
+    console.error('取得商品資料失敗:', error)
   }
 }
 // 篩選有效的主類別：只顯示 is_enabled === 1 的類別
 const menuData = computed(() => {
-  return categories.value.filter((item) => item.is_enabled === 1);
-});
+  return categories.value.filter(item => item.is_enabled === 1)
+})
 
 // 方法：取得分類資料
 const fetchCategories = async () => {
   try {
-    const response = await axios.get(`${api}/categories/all`);
+    const response = await axios.get(`${api}/categories/all`)
     if (response.data && response.data.data) {
-      categories.value = Object.values(response.data.data);
+      categories.value = Object.values(response.data.data)
     }
   } catch (error) {
-    console.error('API 請求失敗:', error);
+    console.error('API 請求失敗:', error)
   }
 }
 
 // 切換頁面
 const changePage = async page => {
-  await fetchProducts(page, category.value, subcategory.value);
+  await fetchProducts(page, category.value, subcategory.value)
 }
 
 // 當圖片成功載入後，更新 `loadedImages` 狀態
 const onImageLoad = productId => {
-  loadedImages.value[productId] = true;
+  loadedImages.value[productId] = true
 }
 
 // 初始化：取得分類和商品資料
 onMounted(async () => {
   // 解碼參數（將 `+` 還原為空格）
-  category.value = route.query.category?.replace(/\+/g, ' ') || '';
-  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || '';
+  category.value = route.query.category?.replace(/\+/g, ' ') || ''
+  subcategory.value = route.query.subcategory?.replace(/\+/g, ' ') || ''
 
   // 取得分類和商品資料
-  await fetchCategories();
-  await fetchProducts(1, category.value, subcategory.value);
+  await fetchCategories()
+  await fetchProducts(1, category.value, subcategory.value)
 })
 
 // 顯示批發價
-defineProps(['product']);
-const wholesaleStore = useWholesaleStore();
+defineProps(['product'])
+const wholesaleStore = useWholesaleStore()
 
 // 監聽路由參數變化
 watch(
@@ -103,10 +103,16 @@ watch(
         </ol>
       </nav>
       <div class="row">
-        <aside class="mb-6 mb-md-0 col-lg-3 col-xl-2 col-md-4 d-none d-lg-block">
+        <aside
+          class="mb-6 mb-md-0 col-lg-3 col-xl-2 col-md-4 d-none d-lg-block"
+        >
           <div class="accordion" id="accordionProductsPage">
             <h2 class="accordion-header">
-              <router-link :to="{ name: 'shop-products', query: { category: '' } }" class="nav-link accordion-button fw-bold border-0 shadow-none allProduct">所有商品</router-link>
+              <router-link
+                :to="{ name: 'shop-products', query: { category: '' } }"
+                class="nav-link accordion-button fw-bold border-0 shadow-none allProduct"
+                >所有商品</router-link
+              >
             </h2>
             <div
               v-for="item in menuData"
@@ -170,8 +176,11 @@ watch(
               </select>
             </div> -->
           </div>
-          <div v-if="productData.length > 0" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 g-lg-4 mb-4">
-            <div  class="col" v-for="product in productData" :key="product.id">
+          <div
+            v-if="productData.length > 0"
+            class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 g-lg-4 mb-4"
+          >
+            <div class="col" v-for="product in productData" :key="product.id">
               <router-link
                 class="card h-100 text-decoration-none"
                 :to="`/shop/shop-product/${product.id}`"
@@ -185,7 +194,7 @@ watch(
                 <div class="card-img-top overflow-hidden">
                   <img
                     :src="product.imageUrl"
-                    class=" img-fluid"
+                    class="img-fluid"
                     :alt="product.title"
                     @load="onImageLoad(product.id)"
                   />
@@ -195,19 +204,27 @@ watch(
                   <p class="text-center price mb-0 fw-bold text-success">
                     <span>建議售價：{{ product.retail_Price }}元</span>
                   </p>
-                  <p v-if="wholesaleStore.isWholesale" class="text-center text-muted mb-0 fw-bold">
+                  <p
+                    v-if="wholesaleStore.isWholesale"
+                    class="text-center text-muted mb-0 fw-bold"
+                  >
                     <span>最低售價：{{ product.origin_price }}元</span>
                   </p>
-                  <p v-if="wholesaleStore.isWholesale" class="text-center mb-0 fw-bold">
-                    <span>批發價：{{ product.price }}元</span>
+                  <p
+                    v-if="wholesaleStore.isWholesale"
+                    class="text-center mb-0 fw-bold"
+                  >
+                    <span>寄售價：{{ product.price }}元</span>
                   </p>
-                  <p v-if="wholesaleStore.isWholesale" class="text-center text-danger mb-0 fw-bold">
+                  <p
+                    v-if="wholesaleStore.isWholesale"
+                    class="text-center text-danger mb-0 fw-bold"
+                  >
                     <span>買斷價：{{ product.buyout_price }}元</span>
                   </p>
                 </div>
               </router-link>
             </div>
-
           </div>
           <p v-else class="text-center">暫時沒有商品</p>
           <nav v-if="totalPages > 1" aria-label="Page navigation example">
@@ -276,5 +293,7 @@ watch(
   </div>
 </template>
 <style scoped>
-.allProduct::after{display: none;}
+.allProduct::after {
+  display: none;
+}
 </style>
