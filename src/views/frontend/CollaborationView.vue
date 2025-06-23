@@ -12,7 +12,7 @@
       團購主、手機配件行、通訊行，需要批發商品，還是有 OEM、ODM
       訂製需求，歡迎透過 LINE 與我們聯繫，我們將提供詳細的報價與付款資訊！
     </p>
-    <router-link
+    <a
       href="https://page.line.me/985yhfxw"
       target="_blank"
       rel="noopener noreferrer"
@@ -21,7 +21,7 @@
         src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/0b3ea2aa-b159-48d5-bdc8-a3602bb2b542.png"
         alt=""
       />
-    </router-link>
+    </a>
   </div>
 </template>
 <style scoped>
