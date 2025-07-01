@@ -37,13 +37,6 @@ onMounted(async () => {
                 >商品列表</router-link
               >
             </li>
-            <!-- <li v-for="item in menuData" :key="item.id" class="nav-item">
-              <router-link
-                :to="{ name: 'shop-products', query: { category: item.name } }"
-                class="nav-link"
-                >{{ item.name }}</router-link
-              >
-            </li> -->
           </ul>
         </div>
         <div class="d-none">
