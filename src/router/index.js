@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AOS from 'aos'
 // import { auth } from './firebase'; // Firebase 初始化
 import HomeView from '@/views/frontend/HomeView.vue'
 
@@ -12,9 +13,14 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/collaboration', // 合作
+      path: '/collaboration', // 公司資訊
       name: 'collaboration',
       component: () => import('@/views/frontend/CollaborationView.vue'),
+    },
+    {
+      path: '/companyPhilosophy', // 公司理念
+      name: 'companyPhilosophy',
+      component: () => import('@/views/frontend/CompanyPhilosophyView.vue'),
     },
     {
       path: '/cart', // 購物車
@@ -107,4 +113,9 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+router.afterEach(() => {
+  setTimeout(() => {
+    AOS.refresh()
+  }, 500)
+})
 export default router

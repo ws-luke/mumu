@@ -44,7 +44,12 @@
       <div class="accordion" id="accordionPhoneMenuPage">
         <h2 class="accordion-header border-bottom">
           <button class="accordion-button px-0 collapsed allProduct">
-            <router-link :to="{name: 'collaboration'}" class="nav-link" @click="closeOffcanvas">批發、採購合作</router-link>
+            <router-link :to="{name: 'collaboration'}" class="nav-link" @click="closeOffcanvas">公司資訊</router-link>
+          </button>
+        </h2>
+        <h2 class="accordion-header border-bottom">
+          <button class="accordion-button px-0 collapsed allProduct">
+            <router-link :to="{name: 'companyPhilosophy'}" class="nav-link" @click="closeOffcanvas">公司理念</router-link>
           </button>
         </h2>
         <h2 class="accordion-header border-bottom">

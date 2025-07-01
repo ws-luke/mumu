@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3 class="mt-5">公司資訊</h3>
+    <h3 class="mt-2 mt-lg-5">公司資訊</h3>
     <p class="mb-1">鼎沐科技股份有限公司</p>
     <P class="mb-1">統編：00038945</P>
     <P class="mb-1">電話：04-2258-1618#33</P>
@@ -17,7 +17,7 @@
       target="_blank"
       rel="noopener noreferrer"
       ><img
-        class="mb-5 mt-3"
+        class="mb-5 mt-3 img-fluid"
         src="https://storage.googleapis.com/mumu-865bc.firebasestorage.app/uploads/0b3ea2aa-b159-48d5-bdc8-a3602bb2b542.png"
         alt=""
       />
